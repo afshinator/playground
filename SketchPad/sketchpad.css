@@ -1,0 +1,40 @@
+/* sketchpad mini-project - Afshin Mokhtari */
+
+a:link {color:#fff;}      /* unvisited link */
+a:visited {color:#fff;}  /* visited link */
+a:hover {color:#d74b4b;}  /* mouse over link */
+a:active {color:#fff;}  /* selected link */
+
+
+header {
+	background-color: #475f77;
+	color: #dcddd8;
+	text-align: center;
+
+	-webkit-border-radius: 32px 32px 32px 32px;
+    border-radius: 32px 32px 32px 32px;
+}
+
+
+body {
+	background-color: #DCDDD8;
+}
+
+#container {
+	width: 960px;
+	margin: auto;
+    overflow: auto;
+	// background-color: #ada692;
+}
+
+.box {
+	background-color: #354b5e;
+	border: 1px solid #dcddd8;
+    float: left;
+}
+
+
+
+.simpleColor {
+	background-color: #d74b4b;
+}

@@ -1,0 +1,6 @@
+# Sketchpad  
+#
+# This file tells git what files not to upload to git from my local dev machine
+
+# Stuff like jquery.js which will be pulled in via CDN...
+/lib
