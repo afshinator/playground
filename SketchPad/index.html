@@ -14,17 +14,19 @@
         <h4>Move mouse over area below to sketch, click a button to try a variation. <a href="http://www.theodinproject.com/curriculum/web_development_basics/web_programming_basics/front_end_basics/project_js_jquery.md" target="_blank">Project details</a> - by <a href="https://github.com/afshinator" target="_blank">Afshin Mokhtari</a>, and of course <a href="http://thecatapi.com/" target="_blank">the Cats</a>.</h4>
         <p></p>
         <div id="buttons">
+            <input type="checkbox" name="borders" /><small>Borders (on/off)  </small>
             <button id="button1" value="1">Simple color change (default)</button>
-            <button id="button2" value="2">Random Color grids</button>
+            <button id="button2" value="2">Random Color sketch</button>
             <button id="button3" value="3">Incremental color change</button>            
             <button id="button4" value="4">Leave a Trail</button>
             <button id="button5" value="5">Cat sketch!</button>
         </div>
     </header>
-    <br>
-    <div id="container"></div>  <!-- container -->
+    <h2 id="loading_Msg">Loading CSS & JQuery, please wait a fat sec...</h2>
+    <div id="container"></div>  <!-- where the grid will live -->
     <footer>
-        <a href="#top" target="_blank">top</a>    
+        <small><a href="#top">top</a></small>
+        <p>A good range for the number of boxes is 16 to 80-ish. For the cat pictures, try low numbers, even 1!</p>
     </footer>
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script> 
     <!-- <script src="lib/jquery-1.10.2.min.js"></script> -->

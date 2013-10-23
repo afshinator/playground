@@ -6,30 +6,40 @@ a:hover {color:#d74b4b;}  /* mouse over link */
 a:active {color:#fff;}  /* selected link */
 
 
-header {
+body {
+	background-color: #DCDDD8;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+
+header, footer {
 	background-color: #475f77;
 	color: #dcddd8;
 	text-align: center;
-
-	-webkit-border-radius: 32px 32px 32px 32px;
-    border-radius: 32px 32px 32px 32px;
+	margin: 10px;
+	-webkit-border-radius: 26px 26px 26px 26px;
+    border-radius: 26px 26px 26px 26px;
 }
 
 
-body {
-	background-color: #DCDDD8;
+footer {
+	clear: both;
 }
+
 
 #container {
-	width: 960px;
+	max-width: 960px;
 	margin: auto;
 }
 
 .box {
 	background-color: #354b5e;
     float: left;
-}
 
+	-webkit-box-sizing: border-box;		/* ensures border doesnt add to width */
+	-moz-box-sizing: border-box;		/* http://learnlayout.com/box-sizing.html */
+	box-sizing: border-box;
+}
 
 
 .simpleColor {
@@ -37,11 +47,18 @@ body {
 }
 
 
-/*I am not a css wiz, but http://css3generator.com/ is! */
+/* http://css3generator.com/ is cool. */
 .rotate15 {
-		-moz-transform: scale(1) rotate(15deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-		-webkit-transform: scale(1) rotate(15deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        -o-transform: scale(1) rotate(15deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        -ms-transform: scale(1) rotate(15deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        transform: scale(1) rotate(15deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+	-moz-transform: scale(1) rotate(15deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+	-webkit-transform: scale(1) rotate(15deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+	-o-transform: scale(1) rotate(15deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+	-ms-transform: scale(1) rotate(15deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+	transform: scale(1) rotate(15deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+}
+
+#loading_Msg {
+	color: #e8de19;
+	text-align: center;
+	text-shadow: 2px 2px 12px #0a2e8a;
+	filter: dropshadow(color=#0a2e8a, offx=2, offy=2);
 }
