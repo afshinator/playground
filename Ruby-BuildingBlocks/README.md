@@ -2,9 +2,9 @@
 
 My implementation of Odin Projects Ruby excerises.
 
-Project 1: Caesar Cipher
-Project 2: Stock Picker
-Project 3: Substrings
+*	Project 1: Caesar Cipher
+* 	Project 2: Stock Picker
+*	Project 3: Substrings
 
 In the tradition of [TestFirst](http://testfirst.org/learn_ruby), exercises include rspec test files.  Run the rake file to run tests.
 
