@@ -1,5 +1,3 @@
-
-# in_words.rb
 # Afshin Mokhtari, Oct 2013
 
 # Modules can be included into multiple classes, 
@@ -9,7 +7,7 @@
 
 module InWords
 
-  # Handles 2-digit numbers, in other words less than 100
+  # Handle 2-digit numbers, in other words less than 100
   def smallWord(n)  
     names1 = [ 'zero', 'one', 'two', 'three', 'four', 'five', 
               'six', 'seven', 'eight', 'nine', 'ten',
@@ -58,7 +56,7 @@ module InWords
 
 
   def in_words
-    return wordify(self)
+    wordify(self)
   end
 
 end  # module

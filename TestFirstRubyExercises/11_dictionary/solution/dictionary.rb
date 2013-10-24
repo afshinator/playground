@@ -1,4 +1,4 @@
-
+# Afshin Mokhtari
 
 class Dictionary
   def initialize
@@ -17,7 +17,6 @@ class Dictionary
   def add args
     # argument needs to be either key value by itself (a string), or key/val pair (hash), 
     # so not sure if checking type of argument is best ruby way to do this, but passes test!
-    
     if args.kind_of?(Hash)        
       @entries.merge!(args)       # not sure if merge! is best way to add to hash
     else
@@ -42,11 +41,7 @@ class Dictionary
 
 
   def printable
-    result = ""
-    keywords.each { |k|
-      result +=  "[#{k}] \"#{@entries[k]}\"\n"
-    }
-    result.chomp  # chomp takes out last \n, so we can pass the test!
+    keywords.map { |kv| "[#{kv}] \"#{@entries[kv]}\"" }.join("\n")   
   end
 
 end

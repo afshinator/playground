@@ -1,19 +1,19 @@
+# Afshin Mokhtari
 
 class RPNCalculator 
   def initialize
-    @stack = []
-    @value = 0
+    @stack = [0]    
   end
 
 
   def value
-    @value
+    @stack.last
   end
 
 
   def pop
     n = @stack.pop
-    raise "calculator is empty" if n.nil?
+    raise "calculator is empty" if n.nil?  # unless n
     return n
   end
 
@@ -26,28 +26,24 @@ class RPNCalculator
   def plus
     first = pop
     second = pop
-    @value = first + second    
-    push # @stack.push(@value)            # put result back on top
+    push(first + second)    
   end
 
 
   def minus
     subtractant = pop
-    @value = pop - subtractant
-    push                    
+    push(pop - subtractant)    
   end
 
 
   def divide
     divisor = pop
-    @value = pop.to_f / divisor.to_f
-    push
+    push(pop.to_f / divisor.to_f)    
   end
 
 
   def times
-    @value = pop * pop      
-    push
+    push(pop * pop)    
   end
 
 
@@ -66,17 +62,12 @@ class RPNCalculator
     len = str.length
     i = 0
     while i < len 
-      # puts "--- #{i} -- #{str[i]} === #{@value} -- #{@stack}"
       if nonNumbers.include?(str[i]) 
         case str[i]
-        when '+' 
-          plus
-        when '-' 
-          minus
-        when '*' 
-          times
-        when '/' 
-          divide
+        when '+' then plus
+        when '-' then minus
+        when '*' then times
+        when '/' then divide
         else
           #do nothing in case of space character
         end
@@ -86,7 +77,7 @@ class RPNCalculator
       end
       i += 1
     end
-    @value
+    value
   end
 
 end
