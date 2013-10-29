@@ -1,7 +1,7 @@
 # Ruby OOP Project 1: Tic Tac Toe
 # http://www.theodinproject.com/courses/ruby-programming/lessons/oop
 #
-# Afshin Mokhtari  (is this file tracked)
+# Afshin Mokhtari
 
 
 class TicTacToe
