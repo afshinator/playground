@@ -4,7 +4,7 @@ My implementation.
 
 To use, go in irb:
 
-* load "ticTacToe.rb"
+* load "tictactoe.rb"
 * t = TicTacToe.new
 * t.play        or t.play("O") for O to start first
 
