@@ -1,0 +1,195 @@
+
+
+
+body {
+	background:#e9e0cd url(img/callot.jpg) top center no-repeat;  /* #e9e0cd */
+	color: white;	
+}
+
+
+h1 {
+	/*	
+	color: #967b42;
+	*/
+	font-size: 5em;
+	margin-top:20px;
+	margin-right: 20px;
+	margin-bottom: 5px;
+}
+
+h3 { 
+	margin-top: 12px;
+	font-size: 1.5em;
+ }
+
+header {
+	position: relative;
+	max-width: 1360px;
+
+	text-shadow: 3px 3px 12px #000;
+    filter: dropshadow(color=#000, offx=3, offy=3);
+}
+
+#appTitle {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.pane {
+	-webkit-border-radius: 12px;
+    border-radius: 12px;
+
+    -webkit-box-shadow:  3px 3px 12px 3px rgba(0, 0, 0, .3);
+    box-shadow:  3px 3px 12px 3px rgba(0, 0, 0, .3);
+}
+
+
+
+#statusMsg {
+	color: #3e2e68;
+}
+
+
+#menu {
+	position: absolute;
+	left:30px;
+	margin-top:25px;
+	padding: 16px;
+	text-align: center;
+	font-family: Tahoma, Verdana, Segoe, sans-serif;
+	background-color:rgba(255,255,255,0.8);
+
+	color: black;
+}
+
+#listings {
+	width: 220px;
+	color: black;
+	text-align: left;   
+}
+
+#status {
+	margin-top: 20px;
+	text-align: center;
+}
+
+#stage {
+	position: relative;
+
+	left: 350px;
+	top: 240px;
+	background-color:rgba(255,255,255,0.8);
+
+	width: 500px;
+	height: 500px;
+}
+
+
+
+/***********      Hangman stage parts  ***/
+.frame {
+	position: absolute;
+		background-color: #9f7506;
+}
+
+#base {
+	left: 115px;
+	top: 455px;
+	width: 360px;
+	height: 14px;
+
+	background-color: #9f7506;  /* for debug */
+}
+
+#pole {
+	left: 440px;
+	top: 25px;
+	width: 14px;
+	height: 430px;
+}
+
+#top {
+	left: 260px;
+	top: 25px;
+	width: 190px;
+	height: 14px;
+}
+
+#noose {
+	left: 270px;
+	top: 32px;
+	width: 10px;
+	height: 65px;
+}
+
+#head {
+	left: 230px;
+	top: 90px;
+	width: 75px;
+	height: 70px;
+}
+
+#body {
+	left: 200px;
+	top: 160px;
+	width: 125px;
+	height: 170px;
+}
+
+#r-arm {
+	left: 60px;
+	top: 160px;
+	width: 140px;
+	height: 40px;
+}
+
+#l-arm {
+	left: 325px;
+	top: 160px;
+	width: 140px;
+	height: 40px;
+}
+
+#r-leg {
+	left: 175px;
+	top: 330px;
+	width: 75px;
+	height: 110px;
+}
+
+#l-leg {
+	left: 275px;
+	top: 330px;
+	width: 75px;
+	height: 110px;
+}
+
+
+
+
+
+
+
+
+/***************** end Hangman stage parts **/
+
+
+
+/*
+ * Menu links
+ */
+
+ul {
+	color: #C4AC78;
+	list-style: none;
+	padding-left: 15px;
+}
+
+li {
+	font-size: 16px;
+}
+li :link { color:#2e3d66; text-decoration:none; } 	/*  #7890C4 */
+li :hover { color:#978a43; background-color:#E9E0CD;}	/*  #C4AC78; */
+li :visited { color:#2e3d66; }
+li :active { color: #E9CDE4;  }

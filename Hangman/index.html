@@ -1,11 +1,45 @@
 <html>
   <head>
-		<script src='https://cdn.firebase.com/v0/firebase.js'></script>
+    <title>Public Executions - by Afshin Mokhtari</title>
+    <meta charset=utf-8>
+    <meta name="description" content="Watch Hangman games!">
+    <meta name="author" content="Afshin Mokhtari">    
+
+    <link href="hangman-tv.css" rel="stylesheet" media="screen"> 	
   </head>
-  <body>
-  	<script>
-		var dataRef = new Firebase("https://hangman-game.firebaseio.com");
-		dataRef.set("I am now writing data into Firebase!");
-  	</script>
-  </body>
+
+<body>
+    <header>
+        <div id="appTitle">
+            <h1>Hangman TV</h1>
+            <h3>Watch your favorite public hanging episodes!</h3>
+        </div>
+    </header>
+
+    <div id="menu" class="pane">
+        <span id="statusMsg">Initializing rocket science...</span>
+        <div id="status"><img src="img/wait.gif"></div>
+        <div id="listings">
+        </div>
+    </div>
+
+    <div id="stage" class="pane">
+        <div id="base" class="frame"></div>
+        <div id="pole" class="frame"></div>
+        <div id="top" class="frame"></div>
+        <div id="noose" class="frame"></div>     
+        <div id="head" class="frame"></div>
+        <div id="body" class="frame"></div>
+        <div id="l-arm" class="frame"></div>
+        <div id="r-arm" class="frame"></div>
+        <div id="l-leg" class="frame"></div>
+        <div id="r-leg" class="frame"></div>
+    </div>
+
+    <script src='https://cdn.firebase.com/v0/firebase.js'></script>
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="app/db-utils.js"></script>
+    <script src="app/hangman-tv.js"></script>
+</body>
+
 </html>
