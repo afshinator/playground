@@ -21,13 +21,15 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 
 	// status is the space in the menu with the loading image and the notifications
 	my.status = function(){
-		var e$ = $('#status');
+		var el$ = $('#status');
 		var msg$ = $('#statusMsg');
+		var rolledUp = false;
 
 		return {
-			fadeIn: function() { e$.fadeIn(); },
-			up : function(n) { e$.slideUp(n ? n : 1000); },
-			down: function() {	e$.slideDown();	},
+			fadeIn: function() { el$.fadeIn(); },
+			up : function(n) { el$.slideUp(n ? n : 1000); rolledUp = true; },
+			down: function() {	el$.slideDown();	rolledUp = false; },
+			set : function(html) { el$.html(html); },
 			msg	: function(str) { msg$.html(str); }
 		};
 	}();
@@ -38,14 +40,14 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 	// menu is the vertical list of Hangings that can be watched,
 	// it will also hold newly broadcast Hangings in the status sub-area
 	var menu = function() {
-		var e$;
+		var el$;
 
 		return {
 			init : function() {
 				function isNumber(n) {  return !isNaN(parseFloat(n)) && isFinite(n);  }
-				e$ = $('#menuList');
+				el$ = $('#menuList');
 
-				e$.on('click', "li", function() {				// upon menu click
+				el$.on('click', "li", function() {				// upon menu click
 					var whatWasClickedOn = $(this).text().toUpperCase();
 					if ( isNumber(whatWasClickedOn[0]) ) {
 						// dont do anything for now
@@ -53,13 +55,13 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 					} else {
 						console.log( whatWasClickedOn );		// TODO: launch viewing
 						my.status.down();
+						stage.prerecorded( whatWasClickedOn );
 					}
 					return false;  // same action as this.prevenDefault(); in other words dont follow the link
 				});
 			}
 		};
 	}();
-
 
 
 	// Gets called after the first view event is fired by Firebase
@@ -73,34 +75,62 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 	my.db.init("https://hangman-game.firebaseio.com", showMenu);
 
 
+	// 
+	var stage = function() {
+		var el$ = $('#stage');
+		var inPlay = false;						// true if we're in the middile of showing a hanging
+		var act = 0;							// There are 10 acts.  Act 0 is show hasnt started yet
+		var eachStep = ["base", "pole", "top", "noose", "head", "body", "r-arm", "l-arm", "r-leg", "l-leg"];	// in order
+		var parts$ = [];
+		// var data;								// Will contain information for each turn from fba
 
+		// initialization; cache all the selection for stage parts
+		for ( var i = 0; i < eachStep.length; i += 1 ) {
+			parts$[i] = $(eachStep[i]);
+		}
 
-	var catch_new_hanging = function() {
-		/*
-		firebaseRef.on('child_added', function(s) {
-			// seems to fire twice after initial .value push
-			// and doesnt fire when I need it to! So not using it.
-			// console.log(" child_added" + s.val());
-		});
-		*/
-		/*
-		firebaseRef.on('child_changed', function(s) {
-			// if a new top level key/val elt added, then new game
-			var newHanging;
+		var hidePart = function(which) { parts$[which].css('visibility', 'hidden'); };
 
-			for ( var i in Object.keys(s.val()) ) {
-				if ( pastHangingNames.indexOf(i) === -1 ) {
-					newHanging = i;
-					console.log('++ Looks like a new game starting: ' + newHanging );
-				}
+		var reset = function() {
+			// if ( inPlay ) { ask if they want to really stop ... }		// TODO
+			for ( var i = 0; i < parts$.length; i += 1 ) {
+				hidePart(i);
 			}
-			console.log(s.val());
-			console.log(Object.keys(s.val()));
+			act = 0;
+			inPlay = false;
+		};
 
-						// if not then its an update to a current game
-		});
-		*/
+		// pass in 
+		var doTry = function(event) {
+			var outputStr = "guess : " + event["guess"];
+			outputStr += "<br>id : " + event["id"];
+			outputStr += "<br>misses : " + event["misses"];
+			outputStr += "<br>playerId : " + event["playerId"];
+			outputStr += "<br>progress : " + event["progress"];
+			outputStr += "<br>try : " + event["try"];
+			
+			my.status.set(outputStr);
+		};
+
+
+
+		var prerecorded = function(which) {
+			data = my.db.get(which);
+
+			// inPlay = true, ...
+
+			for ( var i=0; i < data.length; i += 1 ) {
+				doTry(data[i]);
+			}
+		};
+
+
+		return {
+			doTry: doTry,
+			prerecorded: prerecorded
+		};
 	}();
+
 
 
     return my;

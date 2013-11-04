@@ -98,7 +98,7 @@ header {
 	top: 455px;
 	width: 360px;
 	height: 14px;
-
+	visibility: hidden;
 	background-color: #9f7506;  /* for debug */
 }
 
@@ -107,6 +107,7 @@ header {
 	top: 25px;
 	width: 14px;
 	height: 430px;
+	visibility: hidden;	
 }
 
 #top {
@@ -114,6 +115,7 @@ header {
 	top: 25px;
 	width: 190px;
 	height: 14px;
+	visibility: hidden;	
 }
 
 #noose {
@@ -121,6 +123,8 @@ header {
 	top: 32px;
 	width: 10px;
 	height: 65px;
+	visibility: hidden;
+
 }
 
 #head {
@@ -128,6 +132,13 @@ header {
 	top: 90px;
 	width: 75px;
 	height: 70px;
+	visibility: hidden;
+
+	-moz-transform: scale(1) rotate(2deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+		-webkit-transform: scale(1) rotate(2deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+        -o-transform: scale(1) rotate(2deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+        -ms-transform: scale(1) rotate(2deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+        transform: scale(1) rotate(2deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
 }
 
 #body {
@@ -135,6 +146,8 @@ header {
 	top: 160px;
 	width: 125px;
 	height: 170px;
+	visibility: hidden;
+
 }
 
 #r-arm {
@@ -142,6 +155,13 @@ header {
 	top: 160px;
 	width: 140px;
 	height: 40px;
+	visibility: hidden;
+
+	-moz-transform: scale(1) rotate(7deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+		-webkit-transform: scale(1) rotate(7deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+        -o-transform: scale(1) rotate(7deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+        -ms-transform: scale(1) rotate(7deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+        transform: scale(1) rotate(7deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
 }
 
 #l-arm {
@@ -149,6 +169,13 @@ header {
 	top: 160px;
 	width: 140px;
 	height: 40px;
+	visibility: hidden;
+
+-moz-transform: scale(1) rotate(-4deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+		-webkit-transform: scale(1) rotate(-4deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+        -o-transform: scale(1) rotate(-4deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+        -ms-transform: scale(1) rotate(-4deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+        transform: scale(1) rotate(-4deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
 }
 
 #r-leg {
@@ -156,6 +183,13 @@ header {
 	top: 330px;
 	width: 75px;
 	height: 110px;
+	visibility: hidden;
+
+	-moz-transform: scale(1) rotate(17deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+		-webkit-transform: scale(1) rotate(17deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+        -o-transform: scale(1) rotate(17deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+        -ms-transform: scale(1) rotate(17deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+        transform: scale(1) rotate(17deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
 }
 
 #l-leg {
@@ -163,17 +197,16 @@ header {
 	top: 330px;
 	width: 75px;
 	height: 110px;
+	visibility: hidden;
+
+	-moz-transform: scale(1) rotate(-11deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+		-webkit-transform: scale(1) rotate(-11deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+        -o-transform: scale(1) rotate(-11deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+        -ms-transform: scale(1) rotate(-11deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+        transform: scale(1) rotate(-11deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
 }
 
-
-
-
-
-
-
-
 /***************** end Hangman stage parts **/
-
 
 
 /*
