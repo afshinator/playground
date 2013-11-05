@@ -171,18 +171,22 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 			} else {
 				outputStr += prettify(event["progress"]) + "<br><br>";
 			}
-			outputStr += "Round : " + event["try"] + "<br>";
+
+			if ( event["misses"].length > 8 && !winDetected ) { hangingDetected = true; }
+
+			// outputStr += "Round : " + event["try"] + "<br>";
+			outputStr += "Countdown to death:  " + ( 10 - event["misses"].length );
 			outputStr += "<br>Misses : " + ( event["misses"] === "" ? "none" : event["misses"] ) ;
 			if ( winDetected ) {
 				outputStr += "<br><br><strong>Guess : " + event["guess"] + " is a winner!" + "</strong>";
+			} else if ( hangingDetected ){
+				outputStr += "<br><br><strong>Guess : " + event["guess"] + " Oh Snap!" + "</strong>";
 			} else {
 				outputStr += "<br><br><strong>Guess : " + event["guess"] + "</strong>";
 			}
 			outputStr += "<br>";
 
 			controls.setTurnInfo(outputStr);
-
-			if ( event["misses"].length > 9 ) { hangingDetected = true;}
 
 	console.log(hangingDetected, winDetected);
 	//console.log(outputStr);
@@ -193,14 +197,25 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 		// Passed in a string with the name of hanging (the word being guessed)
 		var prerecorded = function(which) {
 			var i = 0;
+
 			var nextAct = function() {
-console.log('before the doTry, i is '+i+' data.length is ' + data.length);
+console.log('before the doTry, i is ' + i + ' data.length is ' + data.length);
 				if ( i > data.length ) { i = 0; }
 				if ( i === data.length) {
 					// SHOW OVER
 					controls.disableButton();
-					my.status.set( "Game ended in " + i + " round(s)." );
-					// reset();
+					
+					if ( winDetected ) {
+						my.status.set( "Game ended in " + i + " round(s)." );
+					}
+					else if ( hangingDetected ) {
+						my.status.set( "Hang Em High! in " + i + " round(s)." );
+					}
+					else {
+						my.status.set( "Game ended abruptly in " + i + " round(s)!" );
+					}
+					i=0;
+					reset();
 					return;
 				}
 				doTry(data[i]);
