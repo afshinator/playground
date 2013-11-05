@@ -49,11 +49,11 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 
 				el$.on('click', "li", function() {				// upon menu click
 					var whatWasClickedOn = $(this).text().toUpperCase();
-					if ( isNumber(whatWasClickedOn[0]) ) {
+
+					if ( isNumber(whatWasClickedOn[0]) ) {		// click on date, not a hanging.
 						// dont do anything for now
 						console.log( "not an option " + whatWasClickedOn );
 					} else {
-						console.log( whatWasClickedOn );		// TODO: launch viewing
 						my.status.down();
 						stage.prerecorded( whatWasClickedOn );
 					}
@@ -75,53 +75,155 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 	my.db.init("https://hangman-game.firebaseio.com", showMenu);
 
 
-	// 
+	//
+	// The "Next Turn" button, and Information about each turn
+	//
+	var controls = function() {
+		el$ = $('#controls');
+		elInfo$ = $('#infoHere');
+
+		var beingShown = false;
+
+		var show = function() { el$.show(); beingShown = true; };
+
+		var hide = function() { el$.hide(); beingShown = false; };
+
+		var setTurnInfo = function(html) { elInfo$.html(html); };
+
+		var initButton = function(callback) {
+			// show the button
+			$("#button1").prop("disabled", false);
+
+			// set up handler
+			$("#button1").click(function() {
+				callback();
+			});
+		};
+
+		var disableButton = function() { $("#button1").prop("disabled", true); };
+
+		return {
+			show : show,
+			hide : hide,
+			setTurnInfo : setTurnInfo,
+			initButton : initButton,
+			disableButton : disableButton
+		};
+	}();
+
+
+
+
+	//
+	// Main stage where the Hanging gets shown
+	//
 	var stage = function() {
 		var el$ = $('#stage');
 		var inPlay = false;						// true if we're in the middile of showing a hanging
+		var whichInPlay = "";					// The word tyring to be guessed
 		var act = 0;							// There are 10 acts.  Act 0 is show hasnt started yet
 		var eachStep = ["base", "pole", "top", "noose", "head", "body", "r-arm", "l-arm", "r-leg", "l-leg"];	// in order
-		var parts$ = [];
-		// var data;								// Will contain information for each turn from fba
+		var parts$ = [];						// JQuery selection referring to elements of eachStep 
+		var data = null;						// Will contain information for each turn from Firebase
+
+		var hangingDetected = false;
+		var winDetected = false;
 
 		// initialization; cache all the selection for stage parts
 		for ( var i = 0; i < eachStep.length; i += 1 ) {
-			parts$[i] = $(eachStep[i]);
+			parts$[i] = $("#"+eachStep[i]);
 		}
 
 		var hidePart = function(which) { parts$[which].css('visibility', 'hidden'); };
 
 		var reset = function() {
 			// if ( inPlay ) { ask if they want to really stop ... }		// TODO
+			/*
 			for ( var i = 0; i < parts$.length; i += 1 ) {
 				hidePart(i);
 			}
+			*/
 			act = 0;
 			inPlay = false;
+			data = null;
+			hangingDetected = false;
+			winDetected = false;
 		};
 
-		// pass in 
+
+
+		// pass in event from either a pre-recorded hanging or a currently occuring one.
 		var doTry = function(event) {
-			var outputStr = "guess : " + event["guess"];
-			outputStr += "<br>id : " + event["id"];
-			outputStr += "<br>misses : " + event["misses"];
-			outputStr += "<br>playerId : " + event["playerId"];
-			outputStr += "<br>progress : " + event["progress"];
-			outputStr += "<br>try : " + event["try"];
-			
-			my.status.set(outputStr);
+			function prettify(str) {
+				var resultStr = "";
+				for ( var i=0; i < str.length; i+=1 ) {
+					resultStr += str[i] + "  ";
+				}
+				return resultStr;
+			}
+
+			var outputStr = "";
+			var test = event["progress"].replace("_", event["guess"]);
+
+			if ( test === whichInPlay ) {
+				winDetected = true;
+				outputStr += prettify(test) + "<br><br>";
+			} else {
+				outputStr += prettify(event["progress"]) + "<br><br>";
+			}
+			outputStr += "Round : " + event["try"] + "<br>";
+			outputStr += "<br>Misses : " + ( event["misses"] === "" ? "none" : event["misses"] ) ;
+			if ( winDetected ) {
+				outputStr += "<br><br><strong>Guess : " + event["guess"] + " is a winner!" + "</strong>";
+			} else {
+				outputStr += "<br><br><strong>Guess : " + event["guess"] + "</strong>";
+			}
+			outputStr += "<br>";
+
+			controls.setTurnInfo(outputStr);
+
+			if ( event["misses"].length > 9 ) { hangingDetected = true;}
+
+	console.log(hangingDetected, winDetected);
+	//console.log(outputStr);
 		};
 
 
-
+		// Called upon a click in the list of previous hangings;
+		// Passed in a string with the name of hanging (the word being guessed)
 		var prerecorded = function(which) {
-			data = my.db.get(which);
-
-			// inPlay = true, ...
-
-			for ( var i=0; i < data.length; i += 1 ) {
+			var i = 0;
+			var nextAct = function() {
+console.log('before the doTry, i is '+i+' data.length is ' + data.length);
+				if ( i > data.length ) { i = 0; }
+				if ( i === data.length) {
+					// SHOW OVER
+					controls.disableButton();
+					my.status.set( "Game ended in " + i + " round(s)." );
+					// reset();
+					return;
+				}
 				doTry(data[i]);
-			}
+				i += 1;
+				act += 1;
+			};
+
+			whichInPlay = which;					// Name of the hanging which is also the word being guessed.
+			reset();
+			data = my.db.get(which);				// Array of hanging-event objects
+
+			inPlay = true;
+			controls.show();						// side panel with button...
+			
+			var player = ( data[0]["playerId"] === undefined ) ? "anonymous" : data[0]["playerId"] ;
+
+			my.status.msg( "Watching: " + player );
+			my.status.set( "( " + data[0]["id"] + " )");
+
+console.log("Watching " + player + " play a " + data.length + " round game trying to guess " + which );
+			controls.initButton(nextAct);
+
+			doTry(data[i++]);
 		};
 
 
