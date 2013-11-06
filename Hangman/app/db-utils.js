@@ -44,7 +44,7 @@ var hangmanTV = (function ($, my) {                       // Namespacing JQuery 
 						callback(html);
 					} else {
 						console.log("-----~>   First value event from Firebase had data!");
-						my.status.msg('No events to show!');
+						my.announcement.statusMsg('No events to show!');
 						return false; // TODO
 					}
 

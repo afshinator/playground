@@ -5,115 +5,163 @@
 // http:
 
 
-var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide global vars
-										// Creates inter-file sharing of global vars and objects/functions.
-
-	// open a connection to where our data lives and where we get pushed hangman events from
-	// var firebaseRef = new Firebase("https://hangman-game.firebaseio.com");
-	var dbInitialDump;							// where we'll store all past hangman events
-	var pastHangingNames = [];			// will hold names of all hanging sessions in db
-	var pastHangingDates = [];			// will hold all days grouping hanging sessions
-	var firstFbasePull = true;
-
-	var $stage = $('#stage');
-	// $stage.hide();
+var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide global vars,
+										// enables inter-file sharing of global vars and objects/functions.
+	var inPlay = false;				// Is a game going on currently?
+	
+	// Game initialization:									
+	my.db.init("https://hangman-game.firebaseio.com", my.menu.fillWith);	// Connect to Firebase
 
 
-	// status is the space in the menu with the loading image and the notifications
-	my.status = function(){
-		var el$ = $('#status');
-		var msg$ = $('#statusMsg');
-		var rolledUp = false;
+	my.gameRunner = function() {
+		var inPlay;					// true if a game is in progress
+		var live;					// false if showing a saved game
+		var round;					// Turn in the game
+		// Info embeded in each event:
+		var gamePlayer;
+		var gameTimeStamp;
+		var gameWord;
 
-		return {
-			fadeIn: function() { el$.fadeIn(); },
-			up : function(n) { el$.slideUp(n ? n : 1000); rolledUp = true; },
-			down: function() {	el$.slideDown();	rolledUp = false; },
-			set : function(html) { el$.html(html); },
-			msg	: function(str) { msg$.html(str); }
-		};
-	}();
+		// initialization:
+		reset();
 
-	my.status.fadeIn();
+		var gameEvent = function() {		// event utility functions
+			var showsWin = function(e) { return ( e["progress"].replace("_", e["guess"]) === e["guess"] ); };
+			return {
+				theWord : function(e) { return e["guess"]; },
+				timeStamp : function(e) { return e["id"]; },
+				progress : function(e) { return e["progress"]; },
+				misses: function(e) { return e["misses"]; },
+				guess: function(e) { return e["guess"]; },
+				playerName : function(e) { return (e["playerID"] === "anon") ? "anonymous" : e["playerID"]; },
+				showsWin : showsWin,
+				showsLoss : function(e) { return ( e["misses"].length > 8 && ! showsWin(e) ); }
+			};
+		}();
+		
+		function prettify(str) {
+			var resultStr = "";
+			for ( var i = 0; i < str.length; i += 1 ) {	resultStr += str[i] + "  ";	}
+			return resultStr;
+		}
+
+		function reset() {
+			inPlay = false;
+			live = undefined;
+			round = 0;
+			gamePlayer = null;
+			gameTimeStamp = null;
+			gameWord = null;
+		}
+
+		function extractGameDetails(event) {
+			gamePlayer = gameEvent.playerName(event);
+			gameTimeStamp = gameEvent.timeStamp(event);
+			gameWord = gameEvent.theWord(event);
+		}
 
 
-	// menu is the vertical list of Hangings that can be watched,
-	// it will also hold newly broadcast Hangings in the status sub-area
-	var menu = function() {
-		var el$;
+		// called upon click on presaved game
+		function showSavedGame(which) {
+			reset();
+			live = false;
+			inPlay = true;
 
-		return {
-			init : function() {
-				function isNumber(n) {  return !isNaN(parseFloat(n)) && isFinite(n);  }
-				el$ = $('#menuList');
+			var nextTurn = function() {
+				var e = gameData[round-1];
+				var win = gameEvent.showsWin( e );
+				var hang = gameEvent.showsLoss( e );
 
-				el$.on('click', "li", function() {				// upon menu click
-					var whatWasClickedOn = $(this).text().toUpperCase();
+				var misc = "";
+				my.gameStatus.word( prettify( gameEvent.progress(e) ) );
+				my.gameStatus.round('Round ' + round);
+				
+				misc = gameEvent.misses( e );
+				misc = ( misc === "" ) ? "none" : misc;
+				misc = 'wrong guesses: ' + misc + ", --> " + ( 10 - gameEvent.misses(e).length ) + ' left';
 
-					if ( isNumber(whatWasClickedOn[0]) ) {		// click on date, not a hanging.
-						// dont do anything for now
-						console.log( "not an option " + whatWasClickedOn );
-					} else {
-						my.status.down();
-						stage.prerecorded( whatWasClickedOn );
-					}
-					return false;  // same action as this.prevenDefault(); in other words dont follow the link
-				});
+				my.gameStatus.misc(misc);
+				my.gameStatus.guess('Guess: ' + gameEvent.guess(e) );
+
+				if ( ( round > 1 ) &&
+					( gameEvent.misses(e).length > gameEvent.misses(gameData[round-2]).length ) ) {
+					my.stage.doNextAct();
+				}
+
+				if ( !win && !hang && round < gameLength) {
+					round += 1;
+					my.gameStatus.setupButton(nextTurn, "Next Turn");
+				} else {
+					console.log("game ended.");
+					alert('end of story');
+				}
+			};
+
+			var gameData = my.db.get(which);		// Get array of game events
+			var gameLength = gameData.length;
+
+			if ( gameLength < 1 ) {  // will never make it here (?)
+				// TODO: no game rounds to show! end game...
+				return;
 			}
-		};
-	}();
+			
+			round = 1;
+			extractGameDetails(gameData[0]);		// Player name, game time, word being guessed
+			
+			my.announcement.statusMsg( 'Player: ' + gamePlayer );
+			my.announcement.rollupMsg( "<p>" + gameTimeStamp + "</p>" );
+			my.announcement.down();
+
+			my.stage.reset();
+			nextTurn();
+		}
 
 
-	// Gets called after the first view event is fired by Firebase
-	var showMenu = function(html) {
-		$('#listings').append(html);		// Fill in menu of hangings available for viewing
-		my.status.up();						// status is small section above the menu listings; hide loading pic
-		my.status.msg('Choose a hanging to view');
-		menu.init();						// Setup menu click handling
-	};
+		// called by fb event
+		function showLiveGame(event) {
+			if ( inPlay ) {							// are we already in the middle of a showing?
+				if ( ! handleNewEventWhileWeAreAlreadyInPlay() ) {
+					// pre recorded game is being interrupted by a live game,
+					// cancel current game, and go on showing this live game
+				}
+			}
 
-	my.db.init("https://hangman-game.firebaseio.com", showMenu);
+			round += 1;
+			if ( round === 1 ) {
+				live = true;
+				inPlay = true;
+				extractGameDetails(event);			// Player name game time, word being guessed
+
+			}
 
 
-	//
-	// The "Next Turn" button, and Information about each turn
-	//
-	var controls = function() {
-		el$ = $('#controls');
-		elInfo$ = $('#infoHere');
+		}
 
-		var beingShown = false;
 
-		var show = function() { el$.show(); beingShown = true; };
+		// TODO: 
+		function handleNewEventWhileWeAreAlreadyInPlay() {
+			if ( live ) {							// is currently running showing live?
+				my.announcement.statusMsg( 'New : ' + gameEvent.name() );
+				// TODO in db, dont pay attention to this event anymore? , eventually add it to menu
+				return true;  // continue with currently running game
+			} else {
+				// pre-recorded game in session,
+				// interrupt it since new event means a live show is up
+				return false;
+			}
+		}
 
-		var hide = function() { el$.hide(); beingShown = false; };
-
-		var setTurnInfo = function(html) { elInfo$.html(html); };
-
-		var initButton = function(callback) {
-			// show the button
-			$("#button1").prop("disabled", false);
-
-			// set up handler
-			$("#button1").click(function() {
-				callback();
-			});
-		};
-
-		var disableButton = function() { $("#button1").prop("disabled", true); };
 
 		return {
-			show : show,
-			hide : hide,
-			setTurnInfo : setTurnInfo,
-			initButton : initButton,
-			disableButton : disableButton
+			reset : reset,
+			showSavedGame : showSavedGame,
+			showLiveGame : showLiveGame
 		};
+
 	}();
 
 
-
-
+/*
 	//
 	// Main stage where the Hanging gets shown
 	//
@@ -138,11 +186,7 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 
 		var reset = function() {
 			// if ( inPlay ) { ask if they want to really stop ... }		// TODO
-			/*
-			for ( var i = 0; i < parts$.length; i += 1 ) {
-				hidePart(i);
-			}
-			*/
+
 			act = 0;
 			inPlay = false;
 			data = null;
@@ -248,7 +292,6 @@ console.log("Watching " + player + " play a " + data.length + " round game tryin
 		};
 	}();
 
-
-
+*/
     return my;
 }(jQuery, hangmanTV || {}));

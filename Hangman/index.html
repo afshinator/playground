@@ -16,12 +16,18 @@
         </div>
     </header>
 
-    <div id="menu" class="pane">
-        <span id="statusMsg">Initializing rocket science...</span>
-        <div id="status"><img src="img/wait.gif"></div>
-        <div id="listings">
+
+    <div id="announcements" class="pane leftPane">
+        <div id="statusMsg">Initializing rocket science...</div>
+        <div id="rollup"><img src="img/wait.gif"></div>
+    </div>
+
+
+    <div id="menu" class="pane leftPane">
+        <div id="menu-listings">
         </div>
     </div>
+
 
     <div id="stage" class="pane">
         <div id="base" class="frame"></div>
@@ -36,13 +42,18 @@
         <div id="r-leg" class="frame"></div>
     </div>
 
-    <div id="controls" class="pane">
-        <div id="infoHere"></div>
-        <button id="button1" value="x">Next Guess</button>
+    <div id="gameStatus" class="pane">
+        <div id="round"></div>
+        <div id="theWord" class="center"></div>
+        <div id="misc" class="center">a bunch of misc text</div>
+        <div id="theGuess" class="center"></div>
+        <button id="button1" type="button">start</button>
     </div>
+
 
     <script src='https://cdn.firebase.com/v0/firebase.js'></script>
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="app/panes.js"></script>
     <script src="app/db-utils.js"></script>
     <script src="app/hangman-tv.js"></script>
 </body>
