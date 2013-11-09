@@ -26,7 +26,7 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 		reset();
 
 		var gameEvent = function() {		// event utility functions
-			var showsWin = function(e) { return ( e["progress"].replace("_", e["guess"]) === e["guess"] ); };
+			var showsWin = function(e) { return ( e["progress"].replace("_", e["guess"],"g") === gameWord ); };
 			return {
 				theWord : function(e) { return e["guess"]; },
 				timeStamp : function(e) { return e["id"]; },
@@ -54,10 +54,10 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 			gameWord = null;
 		}
 
-		function extractGameDetails(event) {
+		function extractGameDetails(event, whichGame) {
 			gamePlayer = gameEvent.playerName(event);
 			gameTimeStamp = gameEvent.timeStamp(event);
-			gameWord = gameEvent.theWord(event);
+			gameWord = whichGame;
 		}
 
 
@@ -90,12 +90,42 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 
 				if ( !win && !hang && round < gameLength) {
 					round += 1;
-					my.gameStatus.setupButton(nextTurn, "Next Turn");
+					my.gameStatus.setupButton( nextTurn, "Next Turn" );
 				} else {
 					console.log("game ended.");
-					alert('end of story');
+					if ( hang ) {
+						my.gameStatus.setupButton( lossEnding, "Game End" );
+					} else if ( win ) {
+						my.gameStatus.setupButton( winEnding,  gameWord +'!' );
+					} else if ( round >= gameLength ) {
+						my.gameStatus.setupButton( abruptEnding, "Game End" );
+					} else {
+						console.log("WTF!");
+					}
 				}
 			};
+
+			// TODO: DRY-ify these three methods:
+			var abruptEnding = function() {
+				my.gameStatus.guess('Game abruptly over!');
+				my.announcement.rollupMsg( "<p>Player forefieted game!</p>" );
+				my.gameStatus.disableButton();
+			};
+			
+			var winEnding = function() {
+				my.gameStatus.guess('Player Wins!');
+				my.announcement.rollupMsg( "<p>Congrads</p>" );
+				my.gameStatus.disableButton();
+			};
+
+			var lossEnding = function() {
+				my.gameStatus.guess('Hang em high!');
+				my.announcement.rollupMsg( "<p>Player lost!</p>" );
+				my.gameStatus.disableButton();
+				my.stage.doNextAct();
+				my.stage.end();
+			};
+
 
 			var gameData = my.db.get(which);		// Get array of game events
 			var gameLength = gameData.length;
@@ -106,13 +136,15 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 			}
 			
 			round = 1;
-			extractGameDetails(gameData[0]);		// Player name, game time, word being guessed
+			extractGameDetails(gameData[0], which);		// Player name, game time, word being guessed
 			
 			my.announcement.statusMsg( 'Player: ' + gamePlayer );
 			my.announcement.rollupMsg( "<p>" + gameTimeStamp + "</p>" );
 			my.announcement.down();
 
 			my.stage.reset();
+			my.stage.prepare(gameTimeStamp);
+			my.stage.start();
 			nextTurn();
 		}
 
@@ -153,6 +185,11 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 
 
 		return {
+			inPlay: inPlay,							// boolean, whether game is in session
+			live : live,							// boolean, whether game is live
+			gameWord : gameWord,					// if showing in session, whats the word?
+			gameTimeStamp : gameTimeStamp,			// if showing in session, whats the timestamp
+
 			reset : reset,
 			showSavedGame : showSavedGame,
 			showLiveGame : showLiveGame
@@ -162,136 +199,15 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 
 
 /*
-	//
-	// Main stage where the Hanging gets shown
-	//
-	var stage = function() {
-		var el$ = $('#stage');
-		var inPlay = false;						// true if we're in the middile of showing a hanging
-		var whichInPlay = "";					// The word tyring to be guessed
-		var act = 0;							// There are 10 acts.  Act 0 is show hasnt started yet
-		var eachStep = ["base", "pole", "top", "noose", "head", "body", "r-arm", "l-arm", "r-leg", "l-leg"];	// in order
-		var parts$ = [];						// JQuery selection referring to elements of eachStep 
-		var data = null;						// Will contain information for each turn from Firebase
+ * TODO:
+ * ERRORS when we cant connect to the net:
+ *
+ Uncaught SyntaxError: Unexpected token < index.adp:1
+Uncaught ReferenceError: jQuery is not defined panes.js:142
+Uncaught SyntaxError: Unexpected identifier db-utils.js:113
+Uncaught ReferenceError: jQuery is not defined hangman-tv.js:302
+GET https://cdn.firebase.com/v0/firebase.js  index.html:54
 
-		var hangingDetected = false;
-		var winDetected = false;
-
-		// initialization; cache all the selection for stage parts
-		for ( var i = 0; i < eachStep.length; i += 1 ) {
-			parts$[i] = $("#"+eachStep[i]);
-		}
-
-		var hidePart = function(which) { parts$[which].css('visibility', 'hidden'); };
-
-		var reset = function() {
-			// if ( inPlay ) { ask if they want to really stop ... }		// TODO
-
-			act = 0;
-			inPlay = false;
-			data = null;
-			hangingDetected = false;
-			winDetected = false;
-		};
-
-
-
-		// pass in event from either a pre-recorded hanging or a currently occuring one.
-		var doTry = function(event) {
-			function prettify(str) {
-				var resultStr = "";
-				for ( var i=0; i < str.length; i+=1 ) {
-					resultStr += str[i] + "  ";
-				}
-				return resultStr;
-			}
-
-			var outputStr = "";
-			var test = event["progress"].replace("_", event["guess"]);
-
-			if ( test === whichInPlay ) {
-				winDetected = true;
-				outputStr += prettify(test) + "<br><br>";
-			} else {
-				outputStr += prettify(event["progress"]) + "<br><br>";
-			}
-
-			if ( event["misses"].length > 8 && !winDetected ) { hangingDetected = true; }
-
-			// outputStr += "Round : " + event["try"] + "<br>";
-			outputStr += "Countdown to death:  " + ( 10 - event["misses"].length );
-			outputStr += "<br>Misses : " + ( event["misses"] === "" ? "none" : event["misses"] ) ;
-			if ( winDetected ) {
-				outputStr += "<br><br><strong>Guess : " + event["guess"] + " is a winner!" + "</strong>";
-			} else if ( hangingDetected ){
-				outputStr += "<br><br><strong>Guess : " + event["guess"] + " Oh Snap!" + "</strong>";
-			} else {
-				outputStr += "<br><br><strong>Guess : " + event["guess"] + "</strong>";
-			}
-			outputStr += "<br>";
-
-			controls.setTurnInfo(outputStr);
-
-	console.log(hangingDetected, winDetected);
-	//console.log(outputStr);
-		};
-
-
-		// Called upon a click in the list of previous hangings;
-		// Passed in a string with the name of hanging (the word being guessed)
-		var prerecorded = function(which) {
-			var i = 0;
-
-			var nextAct = function() {
-console.log('before the doTry, i is ' + i + ' data.length is ' + data.length);
-				if ( i > data.length ) { i = 0; }
-				if ( i === data.length) {
-					// SHOW OVER
-					controls.disableButton();
-					
-					if ( winDetected ) {
-						my.status.set( "Game ended in " + i + " round(s)." );
-					}
-					else if ( hangingDetected ) {
-						my.status.set( "Hang Em High! in " + i + " round(s)." );
-					}
-					else {
-						my.status.set( "Game ended abruptly in " + i + " round(s)!" );
-					}
-					i=0;
-					reset();
-					return;
-				}
-				doTry(data[i]);
-				i += 1;
-				act += 1;
-			};
-
-			whichInPlay = which;					// Name of the hanging which is also the word being guessed.
-			reset();
-			data = my.db.get(which);				// Array of hanging-event objects
-
-			inPlay = true;
-			controls.show();						// side panel with button...
-			
-			var player = ( data[0]["playerId"] === undefined ) ? "anonymous" : data[0]["playerId"] ;
-
-			my.status.msg( "Watching: " + player );
-			my.status.set( "( " + data[0]["id"] + " )");
-
-console.log("Watching " + player + " play a " + data.length + " round game trying to guess " + which );
-			controls.initButton(nextAct);
-
-			doTry(data[i++]);
-		};
-
-
-		return {
-			doTry: doTry,
-			prerecorded: prerecorded
-		};
-	}();
-
-*/
+ */
     return my;
 }(jQuery, hangmanTV || {}));

@@ -5,7 +5,8 @@
     <meta name="description" content="Watch Hangman games!">
     <meta name="author" content="Afshin Mokhtari">    
 
-    <link href="hangman-tv.css" rel="stylesheet" media="screen"> 	
+    <link href="css/hangman-tv.css" rel="stylesheet" media="screen">
+    <link href="css/animate-custom.css" rel="stylesheet" media="screen"> 	
   </head>
 
 <body>
@@ -30,6 +31,13 @@
 
 
     <div id="stage" class="pane">
+        <div id="text">
+            <p>This lil' applet is the viewer for Hangman games.  HTML, Javascript with JQuery, CSS.  The broadcaster is a lil' Ruby code running somewhere - perhaps on your machine.  Hangman events are broadcast realtime via <a href="https://www.firebase.com/">Firebase</a> API. So cool.<br>
+            Also, you can view past games by clicking on the left.</p>
+            <p>This is my implementation of <a href="http://www.theodinproject.com/courses/ruby-programming/lessons/file-i-o-and-serialization">Project Hangman</a> from <em>the Odin Project.</em></p>
+            <a href="https://github.com/afshinator" target="_new">Source on GitHub</a>
+
+        </div>
         <div id="base" class="frame"></div>
         <div id="pole" class="frame"></div>
         <div id="top" class="frame"></div>

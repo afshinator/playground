@@ -49,7 +49,7 @@ var hangmanTV = (function ($, my) {                       // Namespacing JQuery 
 					}
 
 					firstPingFromFbase = false;
-
+handleFbasePing(my.gameRunner.showLiveGame);
 				} else {
 					console.log("non-first value event received from fb.");		// TODO
 				}
@@ -79,30 +79,61 @@ var hangmanTV = (function ($, my) {                       // Namespacing JQuery 
 		};
 
 
-		var handleFbasePing = function(callback) {
-			/*
-			firebaseRef.on('child_added', function(s) {
-				// seems to fire twice after initial .value push
-				// and doesnt fire when I need it to! So not using it.
-				// console.log(" child_added" + s.val());
-			});
+		var handleFbasePing = function() {
+			/* Fbase 'child_added' event seems to fire twice after initial .value push, 
+			 * and doesnt fire when I need it to! So not using it. For now.
+			firebaseRef.on('child_added', function(s) {	});
 			*/
 
+			// This is the event fbase sends for a new event
 			firebaseRef.on('child_changed', function(s) {
-				// if a new top level key/val elt added, then new game
-				var newHanging;
-/*
-				for ( var i in Object.keys(s.val()) ) {
-					if ( pastHangingNames.indexOf(i) === -1 ) {
+				var newHanging;			// Gets name of new game from among all games on certain day
+
+				// TODO: one problem with this:  If you have a game where the word being guessed
+				// happens to be the same as another game on the same day, this won't set newHanging!
+				for ( var i in s.val() ) {
+console.log( ' s.val() ' + s.val());
+console.log( ' i ' + i);
+					if ( allPastHangings[i] === undefined ) {
 						newHanging = i;
-						console.log('++ Looks like a new game starting: ' + newHanging );
 					}
 				}
-				*/
+				// newHanging will be name of game if not in allPastHangings
+console.log( 'Caught new broadcast event ' + newHanging );
+// So either:
+//	1.event sent is update to live game currently in session
+//	2.event sent is first in a new game just started, no game is being shown
+//	3.event sent belongs to a live game (just started or not), *other* live game in session
+//	4.event sent belongs to a live game (just started), other non-live game in session
+//	5.event sent belongs to a live game (not just started), other non-live game in session
+
+// So only pass on the event to be played by the gameplayer if:
+//		case 1, 
+//		case 2, 
+//		case 4
+//
+				var turn = s.val(); // [newHanging]["try"]; // what turn is embedded in this event?
+
+				if ( !my.gameRunner.inPlay() ) {						// no game running
+					my.gameRunner.showLiveGame( s.val()[newHanging] );	// case 2
+				} else {												// game running
+					// There is a showing going on right now
+					if ( !my.gameRunner.live() && turn === 1) {
+						my.gameRunner.showLiveGame( s.val()[newHanging] );	// case 4
+					}
+				}
+
+				if ( my.gameRunner.live() ) {							// live game already running
+					if ( my.gameRunner.gameWord() === newHanging ) {	// same game, pass on event
+						my.gameRunner.showLiveGame( s.val()[newHanging] );			// case 1
+					} else {											// diff't game, ignore
+						my.announcement.rollupMsg("New game " + newHanging);	// case 3
+					}
+
+				}
+
 				console.log(s.val());
 				console.log(Object.keys(s.val()));
-
-							// if not then its an update to a current game
 			});
 
 		};
