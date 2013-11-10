@@ -37,7 +37,6 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 					// dont do anything for now
 					console.log( "not an option " + whatWasClickedOn );
 				} else {									// Handle menu click
-
 					my.gameStatus.reveal();
 					my.gameRunner.showSavedGame( whatWasClickedOn );
 				}

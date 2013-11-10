@@ -1,26 +1,38 @@
 # Ruby Working with Files and Serializing Data Project: Hangman
+Details:  [http://theodinproject.com/](http://www.theodinproject.com/courses/ruby-programming/lessons/files-and-serialization)
 
-My implementation.
+By Afshin Mokhtari
 
--- First, you need Firebase, two steps:
---- gem install firebase
-----[Ruby wrapper for the Firebase backend API](https://github.com/oscardelben/firebase-ruby)
 
---go in irb:
+To run my code, 
+ - you don't need a firebase account yourself, the code uses mine - for now.
+ - First the backend instructions : the ruby hangman game generator requires 
+ --  gem install firebase
+ --  [ BigBertha - Ruby wrapper for the Firebase backend API](http://derailed.github.io/bigbertha/)
+
+Then after you've pulled down the code, under the game directory, 
+- go in irb:
 
 >load "hangman.rb"
->h = Hangman.new      (this will initialize the game and print out the following:)
+>h = Hangman.new({ playerId => "Your Name"});
 
-* Call the play() method with these options:")
-* 	play           With no options : you as Codebreaker vs the computer.")
-* 	play('v')      Verbose mode - insights into computers thinking about each step")
-* 	play('CDAF')   Start a game as CodeMaker with code you passed in & watch computer go!
+	#	Here are all the options for .new(): 
+	#		:verbose => true 			To get debugging/interesting output
+	#  		:dict => "fname.txt"		Dictionary filename, defaults to "5desk.txt"
+	# 		:answer => "5to12charword"  Set your own word instead of relying on random word
+	#  		:turnLimit => number		How many turns before game is over, defaults to 10
+	#  		:debug => true				More verbose messages, sets :verbose to true too
+	#  		:push => true				Send live updates of each turn to Firebase as an event, default true
+	#  		:firebaseURI 				firebase is our data-store in the cloud, default below
+	# 		:id                         Used to namespace session in Firebase
+	#  		:playerId => string 		Name of player (broadcast to frontend)
 
 
->m.play
+- to start the game and start broadcasting as you play automatically:
+>h.play
 
-Details:
-[http://theodinproject.com/](http://www.theodinproject.com/courses/ruby-programming/lessons/files-and-serialization)
+- For the frontend, just pull index.html into your browser.
+
 
 I7IIIIIIIIIIIIIIIIIIIIIII:=?IIIIIIIIIIIII???IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 IIIIIIIIIIIIIIIIIIIIIIII7??IIIIIIIIIII???IIIIIIIIIIIII??????????IIIIIIIIIIIIIIII

@@ -64,17 +64,33 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 			gameWord = whichGame;
 		}
 
+		//
+		// Called by either showSavedGame() or showLiveGame()
+		function showNextTurn(e, gameData, callback) {
+				var abruptEnding = function() {
+					my.gameStatus.guess('Game abruptly over!');
+					my.announcement.rollupMsg( "<p>Player forefieted game!</p>" );
+					if ( live ) { my.gameStatus.disableButton(); }
+				};
+				
+				var winEnding = function() {
+					my.gameStatus.guess('Player Wins!');
+					my.announcement.rollupMsg( "<p>Congrads</p>" );
+					if ( live ) { my.gameStatus.disableButton(); }
+				};
 
-		// called upon click on presaved game
-		function showSavedGame(which) {
-			reset();
-			live = false;
-			inPlay = true;
+				var lossEnding = function() {
+					my.gameStatus.guess('Hang em high!');
+					my.announcement.rollupMsg( "<p>Player lost!</p>" );
+					if ( live ) { my.gameStatus.disableButton(); }
+					my.stage.doNextAct();
+					my.stage.end();
+				};
 
-			var nextTurn = function() {
-				var e = gameData[round-1];
-				var win = gameEvent.showsWin( e );
-				var hang = gameEvent.showsLoss( e );
+				var gameLength = gameData.length;				// only useful for pre-recorded games
+
+				var win = gameEvent.showsWin( e );			// does this round's event show a win?
+				var hang = gameEvent.showsLoss( e );		// does this round's event show a hangin'?
 
 				var misc = "";
 				my.gameStatus.word( prettify( gameEvent.progress(e) ) );
@@ -86,58 +102,45 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 
 				my.gameStatus.misc(misc);
 				my.gameStatus.guess('Guess: ' + gameEvent.guess(e) );
-
-				if ( ( round > 1 ) &&
-					( gameEvent.misses(e).length > gameEvent.misses(gameData[round-2]).length ) ) {
-					my.stage.doNextAct();
+console.log("WE R AT ROUND " + round + " <-------");
+				if ( round > 1 ) {
+					if ( gameEvent.misses(e).length > gameEvent.misses(gameData[round-2]).length ) {
+						my.stage.doNextAct();
+					}
+				}
+			
+				if ( live ) {
+					gameLength += 1;		// hack to catch abrupt game ending for pre-recorded games
 				}
 
-				if ( !win && !hang && round < gameLength) {
+				if ( !win && !hang && round <= gameLength) {	// 
 					round += 1;
-					my.gameStatus.setupButton( nextTurn, "Next Turn" );
+					if ( !live ) { my.gameStatus.setupButton( callback, "Next Turn" ); }
 				} else {
-					console.log("game ended.");
+console.log("game ended.");
 					if ( hang ) {
 						my.gameStatus.setupButton( lossEnding, "Game End" );
 					} else if ( win ) {
 						my.gameStatus.setupButton( winEnding,  gameWord +'!' );
-					} else if ( round >= gameLength ) {
-						my.gameStatus.setupButton( abruptEnding, "Game End" );
 					} else {
-						console.log("WTF!");
+						my.gameStatus.setupButton( abruptEnding, "Game End" );
 					}
 				}
-			};
+		}
 
-			// TODO: DRY-ify these three methods:
-			var abruptEnding = function() {
-				my.gameStatus.guess('Game abruptly over!');
-				my.announcement.rollupMsg( "<p>Player forefieted game!</p>" );
-				my.gameStatus.disableButton();
-			};
-			
-			var winEnding = function() {
-				my.gameStatus.guess('Player Wins!');
-				my.announcement.rollupMsg( "<p>Congrads</p>" );
-				my.gameStatus.disableButton();
-			};
+		// called upon click on presaved game
+		function showSavedGame(which) {
+			reset();
+			live = false;
+			inPlay = true;
 
-			var lossEnding = function() {
-				my.gameStatus.guess('Hang em high!');
-				my.announcement.rollupMsg( "<p>Player lost!</p>" );
-				my.gameStatus.disableButton();
-				my.stage.doNextAct();
-				my.stage.end();
+			var nextTurn = function() {
+				var e = gameData[round-1];					// the event object for the current turn
+				showNextTurn(e, gameData, nextTurn);
 			};
 
 
 			var gameData = my.db.get(which);		// Get array of game events
-			var gameLength = gameData.length;
-
-			if ( gameLength < 1 ) {  // will never make it here (?)
-				// TODO: no game rounds to show! end game...
-				return;
-			}
 			
 			round = 1;
 			extractGameDetails(gameData[0], which);		// Player name, game time, word being guessed
@@ -153,20 +156,26 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 		}
 
 
-		// called by fb event
-		function showLiveGame(event, which) {
+		// 
+		// event, list of all events / at least every event till current , name of event		
+		function showLiveGame(e, allGameEvents, which) {
+			/*
 			if ( inPlay ) {							// are we already in the middle of a showing?
 				if ( ! handleNewEventWhileWeAreAlreadyInPlay() ) {
 					// pre recorded game is being interrupted by a live game,
 					// cancel current game, and go on showing this live game
 				}
 			}
+			*/
 
-			round += 1;
-			if ( round === 1 ) {
+console.log('inside showLiveGame()');
+			my.gameStatus.reveal();
+
+			if ( round === 0 ) {
+				round = 1;
 				live = true;
 				inPlay = true;
-				extractGameDetails(event, which);			// Player name game time, word being guessed
+				extractGameDetails(e, which);			// Player name game time, word being guessed
 
 				my.announcement.statusMsg( 'Player: ' + gamePlayer );
 				my.announcement.rollupMsg( "<p>" + gameTimeStamp + "</p>" );
@@ -176,8 +185,7 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 				my.stage.prepare(gameTimeStamp);
 				my.stage.start();
 			}
-
-
+			showNextTurn( e, allGameEvents );
 		}
 
 

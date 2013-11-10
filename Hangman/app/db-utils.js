@@ -49,7 +49,7 @@ var hangmanTV = (function ($, my) {                       // Namespacing JQuery 
 					}
 
 					firstPingFromFbase = false;
-handleFbasePing(my.gameRunner.showLiveGame);
+					handleFbasePing(my.gameRunner.showLiveGame);
 				} else {
 					console.log("non-first value event received from fb.");		// TODO
 				}
@@ -105,18 +105,6 @@ handleFbasePing(my.gameRunner.showLiveGame);
 				}
 				// newGame is name of game;  
 console.log( 'Caught new broadcast event ' + newGame );
-// So either:
-//	1.event sent is update to same live game currently in session								( inplay, live, round != 0 )
-//	2.event sent is first in a new game just started, no game is being show						( !inPlay, !live, round = 0 )
-//	3.event sent belongs to a live game (just started or not), *other* live game in session		( inPlay, live, round != 0 )
-//	4.event sent belongs to a live game (just started), other non-live game in session			( inPlay, !live, Round = 0 )
-//	5.event sent belongs to a live game (not just started), other non-live game in session		( inPlay, !live, round != 0 )
-
-// So only pass on the event to be played by the gameplayer if:
-//		case 1, inPlay, live, round != 0
-//		case 2, !inPlay, !live, round = 0
-//		case 4, inPlay, !live, round = 0
-
 
 /*			round is gameRunners notion of what turn it is,  try is embedded in the event
  * 1. event is first in a new game, no current game 					// !inPlay, !live, round == 0, try == 0
@@ -130,19 +118,18 @@ console.log( 'Caught new broadcast event ' + newGame );
  * 	case 2
  *	case 3
  */
-
 				var turn = my.gameRunner.turn();		// Get what round/turn we are on; 0 means a brand new game
 
 				if ( ! my.gameRunner.isPlaying() ) {				// NO game running
 					if ( turn === 0 && lastNewGameEvent['try'] === 1) {				// case 1 : new game broadcast
-							my.gameRunner.showLiveGame( newGameEvents[0], newGame );
+							my.gameRunner.showLiveGame( newGameEvents[0], newGameEvents, newGame );
 					}
 					// else event broadcast is not at first round, ignore it.		// case 5 : not a new game broadcast
 				}
 				else {												// Game IS currently running
 					if ( my.gameRunner.isLive() ) {					// Game running is LIVE
 						if ( newGame === my.gameRunner.theWord() ) {
-							my.gameRunner.showLiveGame( lastNewGameEvent, newGame );// case 2 : update to current game being shown
+							my.gameRunner.showLiveGame( lastNewGameEvent, newGameEvents, newGame );// case 2 : update to current game being shown
 						}
 						// else event broadcast is for a different game, ignore it. // case 4 : update not for game we're showing
 					}
@@ -152,27 +139,7 @@ console.log("// Game running is PRE-RECORDED");
 					}
 				}
 
-/*
-				if ( ! my.inPlay  ) {								// no game running
-					my.gameRunner.showLiveGame( s.val()[newGame][turn], newGame );			// case 2
-				} 
-				else {												// game running
-					// There is a showing going on right now
-					if ( !my.gameRunner.isLive() && turn === 1) {
-						my.gameRunner.showLiveGame( s.val()[newGame][turn], newGame );		// case 4
-					}
-				}
 
-				if ( my.gameRunner.isLive() ) {						// live game already running
-					if ( my.gameRunner.theWord() === newGame ) {	// same game, pass on event
-						my.gameRunner.showLiveGame( s.val()[newGame][turn], newGame );		// case 1
-					} 
-					else {											// diff't game, ignore
-						my.announcement.rollupMsg("New game " + newGame);				// case 3
-					}
-
-				}
-*/
 				console.log(s.val());
 				console.log(Object.keys(s.val()));
 			});

@@ -16,7 +16,7 @@ class Hangman
 	# 		:answer => "5to12charword"  Set your own word instead of relying on random word
 	#  		:turnLimit => number		How many turns before game is over, defaults to 10
 	#  		:debug => true				More verbose messages, sets :verbose to true too
-  	#  		:push => true				Send live updates of each turn to Firebase as an event, default true
+	#  		:push => true				Send live updates of each turn to Firebase as an event, default true
 	#  		:firebaseURI 				firebase is our data-store in the cloud, default below
 	# 		:id                         Used to namespace session in Firebase
 	#  		:playerId => string 		Name of player (broadcast to frontend)
