@@ -7,7 +7,6 @@
 
 var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide global vars,
 										// enables inter-file sharing of global vars and objects/functions.
-	var inPlay = false;				// Is a game going on currently?
 	
 	// Game initialization:									
 	my.db.init("https://hangman-game.firebaseio.com", my.menu.fillWith);	// Connect to Firebase
@@ -17,14 +16,19 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 		var inPlay;					// true if a game is in progress
 		var live;					// false if showing a saved game
 		var round;					// Turn in the game
-		// Info embeded in each event:
-		var gamePlayer;
-		var gameTimeStamp;
+		
+		var gamePlayer;				//  embeded in each event
+		var gameTimeStamp;			//  embeded in each event
 		var gameWord;
 
 		// initialization:
 		reset();
 
+		var turn = function() { return round; };
+		var isLive = function() { return live; };
+		var isPlaying = function () { return inPlay; };
+		var theWord = function() { return gameWord; };
+		
 		var gameEvent = function() {		// event utility functions
 			var showsWin = function(e) { return ( e["progress"].replace("_", e["guess"],"g") === gameWord ); };
 			return {
@@ -150,7 +154,7 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 
 
 		// called by fb event
-		function showLiveGame(event) {
+		function showLiveGame(event, which) {
 			if ( inPlay ) {							// are we already in the middle of a showing?
 				if ( ! handleNewEventWhileWeAreAlreadyInPlay() ) {
 					// pre recorded game is being interrupted by a live game,
@@ -162,8 +166,15 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 			if ( round === 1 ) {
 				live = true;
 				inPlay = true;
-				extractGameDetails(event);			// Player name game time, word being guessed
+				extractGameDetails(event, which);			// Player name game time, word being guessed
 
+				my.announcement.statusMsg( 'Player: ' + gamePlayer );
+				my.announcement.rollupMsg( "<p>" + gameTimeStamp + "</p>" );
+				my.announcement.down();
+
+				my.stage.reset();
+				my.stage.prepare(gameTimeStamp);
+				my.stage.start();
 			}
 
 
@@ -185,14 +196,15 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 
 
 		return {
-			inPlay: inPlay,							// boolean, whether game is in session
-			live : live,							// boolean, whether game is live
-			gameWord : gameWord,					// if showing in session, whats the word?
-			gameTimeStamp : gameTimeStamp,			// if showing in session, whats the timestamp
+			isPlaying : isPlaying,					// boolean, game in session?
+			isLive : isLive,						// boolean, game in session is live?
+			turn : turn,							// what turn in the game; 0 is game not started
+			theWord : theWord,						// during game play, the word that is trying to be guessed
+			gameTimeStamp : gameTimeStamp,			// during game play, the timestamp of when game was/is played
 
 			reset : reset,
-			showSavedGame : showSavedGame,
-			showLiveGame : showLiveGame
+			showSavedGame : showSavedGame,			// Play pre-recorded game from the cloud (the data came in at startup)
+			showLiveGame : showLiveGame				// Play a game being broadcast live, event by event
 		};
 
 	}();
