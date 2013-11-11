@@ -108,7 +108,7 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 		var $scene = [];							// Ref to each scene html element
 		var act = 0;								// What scene in order we are in. 0 == not started yet
 
-		var fileCounts = [0, 0, 0, 0, 7, 4, 2, 3, 3, 3];
+		var fileCounts = [0, 0, 0, 0, 9, 6, 6, 6, 6, 6];
 
 		// initialization: cache JQuery selections for stage parts
 		for ( var i = 0; i < sceneList.length; i += 1 ) {
@@ -123,18 +123,22 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 				for (var i = 0 ; i < key.length; i += 1) {
 					val += key.charCodeAt(i);
 				}
+console.log("====>" + val);				
 				return ( val % max ) + 1 ;
 			}
 			for ( var i = 4; i < sceneList.length; i += 1 ) {
 				h = hash(playerId, fileCounts[i]);
-				str = 'url(img/' + sceneList[i] + '0' + h + '.png)';
+				str = 'url(img/' + sceneList[i] + '-' + h + '.png)';
 console.log(sceneList[i] + ' gets ' + str);
 				$scene[i].css('background', str);
 			}
 		}
 
 		function hideScene(which) { $scene[which].css('visibility', 'hidden'); }
-		function showScene(which) { $scene[which].css('visibility', 'visible'); $scene[which].addClass('animated bounceInRight');}
+		function showScene(which) { 
+			$scene[which].css('visibility', 'visible'); 
+			// $scene[4].addClass('animated shake');
+		}
 
 		function reset() {
 			for ( var i = 0; i < sceneList.length; i += 1 ) {
@@ -152,8 +156,8 @@ console.log(sceneList[i] + ' gets ' + str);
 		}
 
 		function end() {
-			el$.css("background", "url(img/backdrop3.png) top no-repeat");			// hide the stage itself
-
+			el$.css("background", "url(img/backdrop4.png) top no-repeat");			// hide the stage itself
+			$scene[4].addClass('animated swing');
 		}
 
 

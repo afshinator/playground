@@ -198,82 +198,56 @@ header {
 }
 
 #head {
-	left: 230px;
-	top: 90px;
-	width: 75px;
-	height: 70px;
+	left: 240px;
+	top: 95px;
+	width: 60px;
+	height: 55px;
 	visibility: hidden;
 
-	-moz-transform: scale(1) rotate(2deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-		-webkit-transform: scale(1) rotate(2deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        -o-transform: scale(1) rotate(2deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        -ms-transform: scale(1) rotate(2deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        transform: scale(1) rotate(2deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
 }
 
 #body {
-	left: 200px;
-	top: 160px;
-	width: 125px;
-	height: 170px;
+	left: 235px;
+	top: 149px;
+	width: 75px;
+	height: 115px;
 	visibility: hidden;
 
 }
 
 #r-arm {
-	left: 60px;
+	left: 125px;
 	top: 160px;
-	width: 140px;
+	width: 105px;
 	height: 40px;
 	visibility: hidden;
 
-	-moz-transform: scale(1) rotate(7deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-		-webkit-transform: scale(1) rotate(7deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        -o-transform: scale(1) rotate(7deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        -ms-transform: scale(1) rotate(7deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        transform: scale(1) rotate(7deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
 }
 
 #l-arm {
-	left: 325px;
+	left: 310px;
 	top: 160px;
-	width: 140px;
+	width: 105px;
 	height: 40px;
-	visibility: hidden;
-
--moz-transform: scale(1) rotate(-4deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-		-webkit-transform: scale(1) rotate(-4deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        -o-transform: scale(1) rotate(-4deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        -ms-transform: scale(1) rotate(-4deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        transform: scale(1) rotate(-4deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
+	visibility: hidden;      
 }
 
 #r-leg {
-	left: 175px;
-	top: 330px;
-	width: 75px;
-	height: 110px;
+	left: 235px;
+	top: 264px;
+	width: 35px;
+	height: 175px;
 	visibility: hidden;
 
-	-moz-transform: scale(1) rotate(17deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-		-webkit-transform: scale(1) rotate(17deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        -o-transform: scale(1) rotate(17deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        -ms-transform: scale(1) rotate(17deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        transform: scale(1) rotate(17deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
 }
 
 #l-leg {
-	left: 275px;
-	top: 330px;
-	width: 75px;
-	height: 110px;
+	left: 270px;
+	top: 264px;
+	width: 35px;
+	height: 175px;
 	visibility: hidden;
 
-	-moz-transform: scale(1) rotate(-11deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-		-webkit-transform: scale(1) rotate(-11deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        -o-transform: scale(1) rotate(-11deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        -ms-transform: scale(1) rotate(-11deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
-        transform: scale(1) rotate(-11deg) translateX(0px) translateY(0px) skewX(0deg) skewY(0deg);
 }
 
 /***************** end Hangman stage parts **/
