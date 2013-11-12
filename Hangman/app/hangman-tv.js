@@ -159,14 +159,6 @@ console.log("game ended.");
 		// 
 		// event, list of all events / at least every event till current , name of event		
 		function showLiveGame(e, allGameEvents, which) {
-			/*
-			if ( inPlay ) {							// are we already in the middle of a showing?
-				if ( ! handleNewEventWhileWeAreAlreadyInPlay() ) {
-					// pre recorded game is being interrupted by a live game,
-					// cancel current game, and go on showing this live game
-				}
-			}
-			*/
 
 console.log('inside showLiveGame()');
 			my.gameStatus.reveal();

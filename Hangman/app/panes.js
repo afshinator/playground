@@ -123,13 +123,13 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 				for (var i = 0 ; i < key.length; i += 1) {
 					val += key.charCodeAt(i);
 				}
-console.log("====>" + val);				
+console.log("Hash val ====>" + val);
 				return ( val % max ) + 1 ;
 			}
 			for ( var i = 4; i < sceneList.length; i += 1 ) {
 				h = hash(playerId, fileCounts[i]);
 				str = 'url(img/' + sceneList[i] + '-' + h + '.png)';
-console.log(sceneList[i] + ' gets ' + str);
+console.log('-- css : ' + sceneList[i] + ' gets ' + str);
 				$scene[i].css('background', str);
 			}
 		}

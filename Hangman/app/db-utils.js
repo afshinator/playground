@@ -120,28 +120,34 @@ console.log( 'Caught new broadcast event ' + newGame );
  */
 				var turn = my.gameRunner.turn();		// Get what round/turn we are on; 0 means a brand new game
 
-				if ( ! my.gameRunner.isPlaying() ) {				// NO game running
-					if ( turn === 0 && lastNewGameEvent['try'] === 1) {				// case 1 : new game broadcast
+				if ( ! my.gameRunner.isPlaying() ) {				// if NO game running
+					if ( newGame === undefined ) {
+console.log("// case 5 : not a new game broadcast, ignored");								// case 5 : not a new game broadcast
+					}
+					else if ( turn === 0 && lastNewGameEvent['try'] === 1) {				// case 1 : new game broadcast
+console.log("// case 1 : new game broadcast");
 							my.gameRunner.showLiveGame( newGameEvents[0], newGameEvents, newGame );
 					}
-					// else event broadcast is not at first round, ignore it.		// case 5 : not a new game broadcast
+					// TODO: also case 5?
+					// else event broadcast is not at first round, ignore it.		
 				}
 				else {												// Game IS currently running
 					if ( my.gameRunner.isLive() ) {					// Game running is LIVE
 						if ( newGame === my.gameRunner.theWord() ) {
+console.log("// case 2 : update to current game being shown");
 							my.gameRunner.showLiveGame( lastNewGameEvent, newGameEvents, newGame );// case 2 : update to current game being shown
 						}
+console.log("case 4 : update not for game we're showing");
 						// else event broadcast is for a different game, ignore it. // case 4 : update not for game we're showing
 					}
 					else {											// Game running is PRE-RECORDED
-console.log("// Game running is PRE-RECORDED");
+console.log("// TODO: case 3");														// case 3
 						// TODO: show in rollups that a new game is here? , reset stage, pass in new game event.
 					}
 				}
 
-
-				console.log(s.val());
-				console.log(Object.keys(s.val()));
+console.log(s.val());
+console.log(Object.keys(s.val()));
 			});
 
 		};
