@@ -44,7 +44,9 @@ var hangmanTV = (function ($, my) {		// Namespacing JQuery and 'my' as appwide g
 			});
 		}
 
+
 		// callback for Firebase; fills the menu with pre-recorded games
+		// This is cheating, I'm making the db module do the work of building my html.  my bad.
 		function fillWith(html) {
 			listings$.html(html);								// Fill menu with listings from Firebase
 			my.announcement.up();

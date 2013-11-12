@@ -15,7 +15,7 @@ var hangmanTV = (function ($, my) {                       // Namespacing JQuery 
 		var allPastHangings = {};				// Will hold all past Hangings; key is the word
 
 
-		// after init(), data in a allPastHangings hashtable
+		// after init(), data in a allPastHangings hashtable & in the UI menu
 		var init = function(fbaseURI, callback) {
 			var key = "";
 			firebaseRef = new Firebase(fbaseURI);			// Attempt connection to Fbase
@@ -126,7 +126,8 @@ console.log("// case 5 : not a new game broadcast, ignored");								// case 5 :
 					}
 					else if ( turn === 0 && lastNewGameEvent['try'] === 1) {				// case 1 : new game broadcast
 console.log("// case 1 : new game broadcast");
-							my.gameRunner.showLiveGame( newGameEvents[0], newGameEvents, newGame );
+						my.announcement.down();													// case 3
+						my.gameRunner.showLiveGame( newGameEvents[0], newGameEvents, newGame );
 					}
 					// TODO: also case 5?
 					// else event broadcast is not at first round, ignore it.		
@@ -141,7 +142,7 @@ console.log("case 4 : update not for game we're showing");
 						// else event broadcast is for a different game, ignore it. // case 4 : update not for game we're showing
 					}
 					else {											// Game running is PRE-RECORDED
-console.log("// TODO: case 3");														// case 3
+console.log("// TODO: case 3");
 						// TODO: show in rollups that a new game is here? , reset stage, pass in new game event.
 					}
 				}

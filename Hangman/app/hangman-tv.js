@@ -115,9 +115,16 @@ console.log("WE R AT ROUND " + round + " <-------");
 
 				if ( !win && !hang && round <= gameLength) {	// 
 					round += 1;
-					if ( !live ) { my.gameStatus.setupButton( callback, "Next Turn" ); }
+					if ( live ) {
+						my.gameStatus.setupButton( null, "waiting..." );
+						my.gameStatus.hideButton();
+					}
+					else {
+						my.gameStatus.setupButton( callback, "Next Turn" );
+					}
 				} else {
 console.log("game ended.");
+alert('Please re-load to re-start.');	// This alert will go away :-)
 					if ( hang ) {
 						my.gameStatus.setupButton( lossEnding, "Game End" );
 					} else if ( win ) {
@@ -170,7 +177,9 @@ console.log('inside showLiveGame()');
 				extractGameDetails(e, which);			// Player name game time, word being guessed
 
 				my.announcement.statusMsg( 'Player: ' + gamePlayer );
-				my.announcement.rollupMsg( "<p>" + gameTimeStamp + "</p>" );
+				my.announcement.rollupMsg( '<img src="img/anim4.gif" style="width: 25px;" > ' + gameTimeStamp );
+
+				//my.announcement.rollupMsg( "<p>" + gameTimeStamp  + "</p>" );
 				my.announcement.down();
 
 				my.stage.reset();
@@ -214,7 +223,7 @@ console.log('inside showLiveGame()');
  * TODO:
  * ERRORS when we cant connect to the net:
  *
- Uncaught SyntaxError: Unexpected token < index.adp:1
+Uncaught SyntaxError: Unexpected token < index.adp:1
 Uncaught ReferenceError: jQuery is not defined panes.js:142
 Uncaught SyntaxError: Unexpected identifier db-utils.js:113
 Uncaught ReferenceError: jQuery is not defined hangman-tv.js:302
