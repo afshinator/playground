@@ -3,7 +3,7 @@
 My implementation of Odin Projects JS/Jquery excerise.
 
 Details:
-[http://theodinproject.com/](http://www.theodinproject.com/curriculum/web_development_basics/web_programming_basics/front_end_basics/project_js_jquery.md)
+[http://theodinproject.com/](http://www.theodinproject.com/courses/web-development-101/lessons/javascript-and-jquery)
 
 
 
