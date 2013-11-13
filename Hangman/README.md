@@ -4,7 +4,7 @@ Details:  [http://theodinproject.com/](http://www.theodinproject.com/courses/rub
 
 To run my code,
 
- - To see a live or pre-recorged game, run the front-end... **pull index.html into your browser
+ - To see a live or pre-recorged game, run the front-end... **pull index.html into your browser**
 
  - For the backend (which runs a live game), you need to run the ruby code...
 
