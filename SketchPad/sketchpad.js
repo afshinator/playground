@@ -2,7 +2,7 @@
 //      by Afshin Mokhtari
 //
 // JS/Jquery Mini-Project from
-// http://www.theodinproject.com/curriculum/web_development_basics/web_programming_basics/front_end_basics/project_js_jquery.md
+// http://www.theodinproject.com/courses/web-development-101/lessons/javascript-and-jquery
 
 
 $(function() {
