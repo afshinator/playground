@@ -7,7 +7,7 @@ By Afshin Mokhtari
 To run my code, 
  - you don't need a firebase account yourself, the code uses mine - for now.
  - First the backend instructions : the ruby hangman game generator requires 
- --  gem install firebase
+ --  gem install bigbertha
  --  [ BigBertha - Ruby wrapper for the Firebase backend API](http://derailed.github.io/bigbertha/)
 
 Then after you've pulled down the code, under the game directory, 
@@ -34,5 +34,3 @@ then,
 >h.play
 
 - For the frontend, just pull index.html into your browser.
-
-
