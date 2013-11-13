@@ -14,6 +14,8 @@ Then after you've pulled down the code, under the game directory,
 - go in irb:
 
 >load "hangman.rb"
+
+then, 
 >h = Hangman.new({ playerId => "Your Name"});
 
 	#	Here are all the options for .new(): 
