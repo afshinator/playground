@@ -112,8 +112,8 @@ console.log("WE R AT ROUND " + round + " <-------");
 				if ( live ) {
 					gameLength += 1;		// hack to catch abrupt game ending for pre-recorded games
 				}
-
-				if ( !win && !hang && round <= gameLength) {	// 
+if ( round === gameLength ) { console.log('ROUND === gameLength'); }
+				if ( !win && !hang && round < gameLength) {	// 
 					round += 1;
 					if ( live ) {
 						my.gameStatus.setupButton( null, "waiting..." );
@@ -124,7 +124,6 @@ console.log("WE R AT ROUND " + round + " <-------");
 					}
 				} else {
 console.log("game ended.");
-alert('Please re-load to re-start.');	// This alert will go away :-)
 					if ( hang ) {
 						my.gameStatus.setupButton( lossEnding, "Game End" );
 					} else if ( win ) {

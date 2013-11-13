@@ -93,7 +93,8 @@ header {
 
 	#menu-listings {
 		color: black;
-		text-align: left;   
+		text-align: left;
+		font-size:10px;
 	}
 
 
@@ -266,7 +267,7 @@ ul {
 }
 
 li {
-	font-size: 16px;
+	font-size: 12px;
 }
 li :link { color:#2e3d66; text-decoration:none; } 	/*  #7890C4 */
 li :hover { color:#978a43; background-color:#E9E0CD;}	/*  #C4AC78; */
