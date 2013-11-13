@@ -4,12 +4,17 @@ Details:  [http://theodinproject.com/](http://www.theodinproject.com/courses/rub
 By Afshin Mokhtari
 
 
-To run my code, 
+To run my code,
+
+ - ** To see a game, just run the front-end... pull index.html into your browser
+
+ - For the backend, you need to run the ruby code...
+ 
  - you don't need a firebase account yourself, the code uses mine - for now.
  - First the backend instructions : the ruby hangman game generator requires
 
  --  gem install firebase
- 
+
  --  [ BigBertha - Ruby wrapper for the Firebase backend API](http://derailed.github.io/bigbertha/)
 
 Then after you've pulled down the code, under the game directory, 
@@ -35,4 +40,3 @@ then,
 - to start the game and start broadcasting as you play automatically:
 >h.play
 
-- For the frontend, just pull index.html into your browser.
