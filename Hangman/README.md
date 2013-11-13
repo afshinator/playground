@@ -6,7 +6,7 @@ To run my code,
 
  - To see a live or pre-recorged game, run the front-end... **pull index.html into your browser**
 
- - For the backend (which runs a live game), you need to run the ruby code...
+ - For the backend (which lets u play & broadcast a live game), you need to run the ruby code...
 
  - you don't need a firebase account yourself, the code uses mine - for now.
  - First the backend instructions : the ruby hangman game generator requires
