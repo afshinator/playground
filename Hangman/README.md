@@ -1,15 +1,13 @@
 # Ruby Working with Files and Serializing Data Project: Hangman
 Details:  [http://theodinproject.com/](http://www.theodinproject.com/courses/ruby-programming/lessons/files-and-serialization)
 
-By Afshin Mokhtari
-
 
 To run my code,
 
  - ** To see a game, just run the front-end... pull index.html into your browser
 
  - For the backend, you need to run the ruby code...
- 
+
  - you don't need a firebase account yourself, the code uses mine - for now.
  - First the backend instructions : the ruby hangman game generator requires
 
@@ -40,3 +38,5 @@ then,
 - to start the game and start broadcasting as you play automatically:
 >h.play
 
+<hr>
+Created by [Afshin Mokhtari](http://www.github.com/afshinator)
