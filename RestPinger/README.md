@@ -9,8 +9,8 @@ Use RestClient to do a Google search
 Usage:
 
 ```
->h = RestPinger.new()										# default bahivour : print program options
+>h = RestPinger.new()										# default behavior : print program options
 >h.run("foo")												# default google search for "foo"
->h.run({search => "foo" })																					# search for "foo"
+>h.run({search => "foo" })									# search for "foo"
 >h.run({verb => "POST", host =>"http://example.com/resource"})	# default is GET; POST, DELETE
 ```
