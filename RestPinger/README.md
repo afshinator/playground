@@ -4,13 +4,30 @@ Project: Web Refresher from [the Odin Project](http://www.theodinproject.com/rub
 
 ---
 
-Use RestClient to do a Google search
+### Use RestClient search to do HTTP requests
+
+- Can do a simple **google search**, or
+
+- Mimick a browser sending requests to a Rails backend for fun and mischief!
+
+---
+
 
 Usage:
 
 ```
->h = RestPinger.new()										# default behavior : print program options
->h.run("foo")												# default google search for "foo"
->h.run({search => "foo" })									# search for "foo"
->h.run({verb => "POST", host =>"http://example.com/resource"})	# default is GET; POST, DELETE
+# from IRB, 
+>'load restpinger.rb' 
+
+> rp = RestPinger.new       # to get these instructions
+> rp = RestPinger.new("a search term")  # search Google
+
+# To search elsewhere
+> rp = RestPinger.new({ :host => "http://www.ask.com/", :prefix => "web?q=", :what => "blues")
+
+# --- Mimick a Rails client :
+
+# Default GET request of the form /posts/:id   (action: posts#show)
+> rp = RestPinger.new({ :host => "http://rails.server.com", :resource => "posts", :id => "2"} )
+
 ```
