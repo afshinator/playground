@@ -13,7 +13,7 @@ require 'rest-client'
 
 class RestPinger
 
-	attr_reader :where
+	attr_reader :urlToSend
 
 	def initialize(options = {})
 		@options = options
@@ -21,15 +21,28 @@ class RestPinger
 		if @options != {}
 			run
 		else
-			puts 'RESTPinger Options:'
+			puts "--------------------------------RESTPinger Instructions"
+			puts "- from IRB, 'load restpinger.rb' "
+         puts
+			puts "> rp = RestPinger.new       # to get these instructions"
+			puts '> rp = RestPinger.new("a search term")  # search Google'
+         puts
+         puts 'To search elsewhere :'
+			puts '> rp = RestPinger.new({ :host => "http://www.ask.com/", :prefix => "web?q=", :what => "blues")'
+         puts
+         puts 'Mimick a Rails client :'
+			puts '> rp = RestPinger.new({ :host => "", :resource => "posts", :id => "2"} )'
+         puts "--------------------------------"
+         puts
 		end
-
 	end
+
+
 
 	def run
 		parseCommandLine
-#		response = RestClient.get @where, :params => {:prefix => 'search?q=', :baz => 'qux'}
-		response = RestClient.get @where
+
+		response = RestClient.get @urlToSend
 
 		if @puts
 			puts '-->Returned response code:' + response.code.to_s
@@ -39,6 +52,7 @@ class RestPinger
 		end
 
 		return response.code
+
 	end
 
 
@@ -46,23 +60,30 @@ class RestPinger
 	def parseCommandLine
 		prefix = "search?q="
 		google = "http://www.google.com/"
+      myRailsBlog = "http://blackwater-bay-rails-75387.usw1.nitrousbox.com/"
 
-		if @options.is_a? String			
-			@where = google + prefix + @options 
-			#puts 'Search string:' + @where
-		else
-			# Get defaults from cmd-line parameters, or set defaults
-			@search = @options[:search] || true				# whether to search or not
-			@what = @options[:what] || "whatever"			# what to search for
-			@where = @options[:host] || google			 	# hostname to ping
-			@verb = @options[:verb] || "GET"					# POST, PUT, ...
-			@prefix = @options[:prefix] || prefix			# search prefix for url
+		if @options.is_a? String	# ("search term")
+			@urlToSend = google + prefix + @options 
+		else                       # ( { key => 'value' } )
+         @verb = @options[:verb] || "GET"       # POST, PUT, ...
+         @puts = @options[:puts] || false       # whether to puts output
 
-			@puts = @options[:puts] || false					# whether to puts output
+         @resource = @options[:resource] || nil 
 
-			@where = @where + @prefix + @what  # when object is passed in instead of a string, @what holds what to search for
+         if @resource != nil        # Mimick Rails client
+            @where = @options[:host] || myRailsBlog      # hostname to ping              
+            @resource = @options[:resource]
+            @id = @options[:id]
+
+            @urlToSend = @where + @resource + '/' + @id  # TODO: for now, a GET to resource with ID
+         else                       # Defaul search options
+            @where = @options[:host] || google           # hostname to ping            
+            @what = @options[:what] || "whatever"        # search term, what to search for
+            @prefix = @options[:prefix] || prefix        # search prefix for url
+            @urlToSend = @where + @prefix + @what        # build search string
+         end
 		end
-
 	end
+
 end
 
