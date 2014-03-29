@@ -42,3 +42,7 @@ Make sure that you've got Rest Client installed, do a ```$ gem install rest-clie
 > rp = RestPinger.new({ :rails => true, :host => "http://server/", :prefix => "posts/new"} )
 
 ```
+
+Not-totally-unrelated fun picture:
+
+![Network fun](http://www.edgewave.com/img/diagram/6-4/StepTwo.gif "ping!")
