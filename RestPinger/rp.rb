@@ -87,6 +87,7 @@ class RestPinger
 
     # One string argument to object will do default google search
     if @options.is_a? String 
+      @options.gsub!(/\s/, '-')        # replace spaces in search string with dashes
       @urlToSend = google + prefix + @options
       @puts = true
       @verb = 'GET'

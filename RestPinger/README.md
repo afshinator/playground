@@ -20,18 +20,23 @@ Make sure that you've got Rest Client installed, do a ```$ gem install rest-clie
 
 ```
 # from IRB, 
->'load restpinger.rb' 
+>'load rp.rb' 
 
-> rp = RestPinger.new       			# to get these instructions
-> rp = RestPinger.new("search-term")  # search Google
+> rp = RestPinger.new       		  # to get instructions
+> rp = RestPinger.new("search-term")  # search Google with passed in term
 
 # To search elsewhere
 > rp = RestPinger.new({ :host => "http://www.ask.com/", :prefix => "web?q=", :what => "blues")
 
-# --- Mimick a Rails client :
+# To see all the response body (long output!)   { defaults: uses GET, knows googles prefix }
+> rp = RestPinger.new({ :puts => true, :host => "http://www.google.com/", :what => "foobar" })
+```
 
+- Mimick a Rails client :
+
+```
 # Default GET request of the form /posts/:id   (action: posts#show)
-> rp = RestPinger.new({ :rails => true, :host => "http://rails.server.com", :resource => "posts", :id => "3"} )
+> rp = RestPinger.new({ :rails => true, :host => "http://rails.server.com", :prefix => "posts", :id => "3"} )
 
 # GET request of the form /posts/new (action: posts#new)
 > rp = RestPinger.new({ :rails => true, :host => "http://server/", :prefix => "posts/new"} )
