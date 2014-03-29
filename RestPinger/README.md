@@ -1,10 +1,10 @@
 ## RestPinger - lightweight interface to [rest-client](https://github.com/rest-client/rest-client)
 
-Project: Web Refresher from [the Odin Project](http://www.theodinproject.com/ruby-on-rails/let-s-get-building)
+**Project: Web Refresher** from [the Odin Project](http://www.theodinproject.com/ruby-on-rails/let-s-get-building)
 
 ---
 
-### Use RestClient search to do HTTP requests
+### Use RestClient gem to do HTTP requests
 
 - Can do a simple **google search**, or
 
@@ -15,11 +15,14 @@ Project: Web Refresher from [the Odin Project](http://www.theodinproject.com/rub
 
 Usage:
 
+Make sure that you've got Rest Client installed, do a ```$ gem install rest-client```,
+
+
 ```
 # from IRB, 
 >'load restpinger.rb' 
 
-> rp = RestPinger.new       # to get these instructions
+> rp = RestPinger.new       			# to get these instructions
 > rp = RestPinger.new("a search term")  # search Google
 
 # To search elsewhere

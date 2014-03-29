@@ -1,9 +1,9 @@
 require './spec_helper'
 require 'rest-client'
-require './rc'
+require './rp'
 
 describe 'RestPinger'  do
-  context 'Basic command line options ' do 
+  context 'Doing normal search ' do 
     it 'when none, prints out program options' do
         rc = RestPinger.new
 
@@ -20,22 +20,16 @@ describe 'RestPinger'  do
 
 
     it 'lets you pass in hash to choose search engine, search term' do
-      rc = RestPinger.new( { :host => "http://www.ask.com/", :prefix => "web?q=", :what => "blues" } ) 
+      rc = RestPinger.new( { :host => "http://www.ask.com/", :prefix => "web?q=", :what => "blues" , :puts => false} ) 
 
       expect(rc.urlToSend).to eq("http://www.ask.com/web?q=blues")
     end
 
-
-    it 'outputs returned headers for google if command line has {:puts => "true"}' do
-      rc = RestPinger.new( {  :puts => "true" } ) 
-
-      expect(rc.urlToSend).to eq("http://www.google.com/search?q=whatever")
-    end
   end 
 
   context 'Mimicking a Rails app client' do
     it 'does a GET with a resource and id (a #show action)' do
-      rc = RestPinger.new( { :host => "http://blackwater-bay-rails-75387.usw1.nitrousbox.com/", :resource => "posts", :id => "2" } )
+      rc = RestPinger.new( { :rails => true, :host => "http://blackwater-bay-rails-75387.usw1.nitrousbox.com/", :prefix => "posts", :id => "2", :puts => false } )
 
       # test will fail if 404 is returned
     end
