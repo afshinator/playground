@@ -39,7 +39,10 @@ class RestPinger
       puts
       puts 'Other key/val options:'
       puts '  puts => true/false, default: true;         print response code, header, and content'
-      puts '  headerOnly => true/false, default:false;   print the header only'
+      puts '  headerOnly => true/false, default:true;    print the header only'
+      puts '  rails => true/false,  default:false;       mimick a rails request'
+      puts '  verb => GET/POST/...  default:GET;         HTTP verb to sent'
+      puts '  TODO: more to come'
       puts '  '
       puts "--------------------------------"
       puts

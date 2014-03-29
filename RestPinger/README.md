@@ -23,7 +23,7 @@ Make sure that you've got Rest Client installed, do a ```$ gem install rest-clie
 >'load restpinger.rb' 
 
 > rp = RestPinger.new       			# to get these instructions
-> rp = RestPinger.new("a search term")  # search Google
+> rp = RestPinger.new("search-term")  # search Google
 
 # To search elsewhere
 > rp = RestPinger.new({ :host => "http://www.ask.com/", :prefix => "web?q=", :what => "blues")
@@ -31,6 +31,9 @@ Make sure that you've got Rest Client installed, do a ```$ gem install rest-clie
 # --- Mimick a Rails client :
 
 # Default GET request of the form /posts/:id   (action: posts#show)
-> rp = RestPinger.new({ :host => "http://rails.server.com", :resource => "posts", :id => "2"} )
+> rp = RestPinger.new({ :rails => true, :host => "http://rails.server.com", :resource => "posts", :id => "3"} )
+
+# GET request of the form /posts/new (action: posts#new)
+> rp = RestPinger.new({ :rails => true, :host => "http://server/", :prefix => "posts/new"} )
 
 ```
