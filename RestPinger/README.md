@@ -9,6 +9,7 @@
 
 - Mimick a browser sending requests to a Rails backend for **fun and mischief!**
 
+- TODO: Just implemnted enough for the studygroup demo, there's plenty to be done.
 ---
 
 
@@ -39,6 +40,10 @@ Make sure that you've got Rest Client installed, do a ```$ gem install rest-clie
 
 # GET request of the form /posts/new (action: posts#new)
 > rp = RestPinger.new({ :rails => true, :host => "http://server/", :prefix => "posts/new"} )
+
+#  DELETE /post/:id  (#destroy)         This will result in a 422.
+> rp = RestPinger.new({ :rails => true, :verb => 'DELETE', :host => "http://server.com/", :prefix => "posts",  :id => "2"} )
+
 
 ```
 

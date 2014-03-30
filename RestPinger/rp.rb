@@ -31,10 +31,6 @@ class RestPinger
       puts '> rp = RestPinger.new({ :host => "http://www.ask.com/", :prefix => "web?q=", :what => "blues")'
       puts
       puts 'Mimick a Rails client :'
-#  GET /post/:id  (#show)      
-#       rp = RestPinger.new({ :rails => true, :host => "http://blackwater-bay-rails-75387.usw1.nitrousbox.com/", :prefix => "posts", :id => "3"} )
-#  GET /post/new  (#new)
-#       rp = RestPinger.new({ :rails => true, :host => "http://blackwater-bay-rails-75387.usw1.nitrousbox.com/", :prefix => "posts/new"} )
       puts '> rp = RestPinger.new({ :host => "", :resource => "posts", :id => "2"} )'
       puts
       puts 'Other key/val options:'
@@ -58,6 +54,8 @@ class RestPinger
       response = RestClient.get @urlToSend
     elsif @verb == 'POST'
       response = RestClient.post @urlToSend
+    elsif @verb == 'DELETE'
+      response = RestClient.delete @urlToSend
     end
 
     if @puts == true
