@@ -3,13 +3,6 @@ require 'rest-client'
 # Look at 'Query parameters' section in
 # https://github.com/rest-client/rest-client
 
-# Usage:
-#
-# >h = RestPinger.new()                                               # default bahivour : print program options
-# >h.run("foo")                                                       # default google search for "foo"
-# >h.run({search => "foo" })                                          # search for "foo"
-# >h.run({verb => "POST", host =>"http://example.com/resource"})      # default is GET; POST, DELETE
-#
 
 class RestPinger
 
@@ -34,10 +27,10 @@ class RestPinger
       puts '> rp = RestPinger.new({ :host => "", :resource => "posts", :id => "2"} )'
       puts
       puts 'Other key/val options:'
-      puts '  puts => true/false, default: true;         print response code, header, and content'
-      puts '  headerOnly => true/false, default:true;    print the header only'
-      puts '  rails => true/false,  default:false;       mimick a rails request'
-      puts '  verb => GET/POST/...  default:GET;         HTTP verb to sent'
+      puts '  puts        => true/false, default: true;   print response code, header, and content'
+      puts '  headerOnly  => true/false, default:true;    print the header only'
+      puts '  rails       => true/false,  default:false;  mimick a rails request'
+      puts '  verb        => GET/POST/DELETE...  default:GET; HTTP verb to send'
       puts '  TODO: more to come'
       puts '  '
       puts "--------------------------------"
@@ -85,12 +78,12 @@ class RestPinger
 
     # One string argument to object will do default google search
     if @options.is_a? String 
-      @options.gsub!(/\s/, '-')        # replace spaces in search string with dashes
-      @urlToSend = google + prefix + @options
-      @puts = true
-      @verb = 'GET'
+      @options.gsub!(/\s/, '-')                   # replace spaces in search string with dashes
+      @urlToSend = google + prefix + @options     # will be final constructed request url
+      @puts = false                                # to show request body or not
+      @verb = 'GET'                               # default HTTP verb
 
-      @headerOnly = true    # COMMENT THIS !!!!    
+      @headerOnly = true              # default to not showing request body
 
     # Else, should pass in an object with options key/val pairs  
     else
@@ -99,7 +92,7 @@ class RestPinger
       @verb = @options[:verb] || "GET"                  # HTTP verb to use, default to GET
 
       @rails = @options[:rails] || false                # rails option 
-      @id = @options[:id] || ""
+      @id = @options[:id] || ""                         # in rails mode, what resource id to hit
 
       if @rails 
         @where = @options[:host] || myRailsBlog
