@@ -16,7 +16,7 @@ class RestPinger
       run
     else
       puts "--------------------------------RESTPinger Instructions"
-      puts "- from IRB, 'load restpinger.rb' "
+      puts "- from IRB, 'load rp.rb' "
       puts
       puts "> rp = RestPinger.new       # to get these instructions"
       puts '> rp = RestPinger.new("a search term")  # search Google'
