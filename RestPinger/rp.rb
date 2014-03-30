@@ -1,8 +1,9 @@
 require 'rest-client'
 
-# Look at 'Query parameters' section in
-# https://github.com/rest-client/rest-client
-
+# Take a look at the project README for purpose & instructions, 
+# or better yet, the Week 4 transcript of the studygroup at
+# https://github.com/afshinator/OdinRailsStudyGroup/blob/master/week4-transcript.md
+# or just looksy below...
 
 class RestPinger
 
@@ -39,11 +40,11 @@ class RestPinger
   end
 
 
-
+  # Where the action actually happens
   def run
     parseCommandLine
 
-    if (@options.is_a? String) || @verb == 'GET'
+    if (@options.is_a? String) || @verb == 'GET'      # Calls to rest-client
       response = RestClient.get @urlToSend
     elsif @verb == 'POST'
       response = RestClient.post @urlToSend
@@ -63,8 +64,6 @@ class RestPinger
       puts response.to_str
       puts '------------> Response end'      
     end
-
-    # return response.code
 
   end
 
@@ -113,7 +112,6 @@ class RestPinger
 
     puts '------------> Final URL:' + @urlToSend
   end
-
 
 end
 
