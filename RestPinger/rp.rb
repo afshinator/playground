@@ -73,7 +73,7 @@ class RestPinger
   def parseCommandLine
     prefix = "search?q="
     google = "http://www.google.com/"
-    myRailsBlog = "http://blackwater-bay-rails-75387.usw1.nitrousbox.com/"
+    myRailsBlog = "http://your-blog-here/"      # TODO: fill this in if you want to use default
 
     # One string argument to object will do default google search
     if @options.is_a? String 
