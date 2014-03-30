@@ -10,10 +10,11 @@
 - Mimick a browser sending requests to a Rails backend for **fun and mischief!**
 
 - TODO: Just implemnted enough for the studygroup demo, there's plenty to be done.
+
 ---
 
 
-**Usage:**
+### Usage:
 
 Make sure that you've got Rest Client installed, do a ```$ gem install rest-client```,
 
