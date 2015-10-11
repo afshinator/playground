@@ -1,5 +1,7 @@
 # A ReactJS Shopping Cart example
 
+Why? To learn React !
+
 ---
 
 ### Dependencies
