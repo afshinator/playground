@@ -1,6 +1,6 @@
 # A ReactJS Shopping Cart example
 
-Why? To learn React !
+Why? To learn React !!
 
 ---
 
